@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catatan Progres - Mega Cell Celebration Edition</title>
+    <title>Catatan Progres - Mega Full-Stack Planner</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
 
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
         body {
@@ -274,7 +274,7 @@
         }
     </style>
 </head>
-<body id="app-body" class="min-h-screen lg:h-screen w-screen flex flex-col lg:flex-row p-2.5 md:p-4 gap-3 md:gap-4 text-sm md:text-base antialiased overflow-y-auto lg:overflow-hidden">
+<body id="app-body" class="min-h-screen lg:h-screen w-screen flex flex-col lg:flex-row p-2.5 md:p-4 gap-3 md:gap-4 text-sm md:text-base antialiased overflow-y-auto lg:overflow-hidden bg-[#0f172a]">
 
     <!-- MOBILE TAB NAVIGATION -->
     <div class="flex lg:hidden bg-dark-card p-1.5 rounded-xl border border-white/20 shrink-0 gap-1">
@@ -521,125 +521,33 @@
 
     <script>
         const quotesPool = [
-            "Konsistensi kecil mengalahkan ledakan usaha sesaat.",
-            "Setiap tugas yang dicentang adalah kemenangan atas diri sendiri.",
-            "Progres lambat tetaplah progres. Jangan berhenti.",
-            "Fokus pada satu hal, selesaikan dengan tuntas.",
-            "Hari ini dirancang untuk lebih baik dari kemarin.",
-            "Disiplin adalah kebebasan dalam bentuk tindakan.",
-            "Waktu terus berjalan, buat aksinya berarti.",
-            "Lelah itu wajar, menyerah itu pilihan.",
-            "Kecil setiap hari berbuah hasil luar biasa.",
-            "Jangan tunggu sempurna, mulai dari sekarang.",
-            "Kekuatan terbesar lahir dari kebiasaan harian.",
-            "Rencana tanpa aksi hanya angan-angan.",
-            "Fokuskan energi pada apa yang bisa dikendalikan.",
-            "Kegagalan hanya data untuk mencoba lebih cerdas.",
-            "Satu langkah maju lebih baik dari diam di tempat.",
-            "Hargai proses, hasil akan mengikuti.",
-            "Bangun versi terbaik dirimu secara diam-diam.",
-            "Tenang, bernapas, dan eksekusi.",
-            "Rasa malas musuh utama, taklukkan hari ini.",
-            "Masa depan dibangun oleh kebiasaan hari ini.",
-            "Jangan bandingkan prosesmu dengan panggung orang lain.",
-            "Berani gagal berarti berani bertumbuh.",
-            "Kejernihan pikiran datang dari aksi nyata.",
-            "Buat dirimu bangga saat melihat ke belakang nanti.",
-            "Kualitas hidup ditentukan oleh kualitas keputusanmu.",
-            "Selesaikan yang tertunda, ringankan pikiran.",
-            "Aksimu hari ini adalah penentu esok hari.",
-            "Letih hari ini adalah fondasi sukses esok hari.",
-            "Tegar di tengah proses yang melelahkan.",
-            "Jadilah solusi bagi tantanganmu sendiri.",
-            "Fokus pada solusi, bukan pada keluhan.",
-            "Setiap detik adalah peluang baru.",
-            "Kunci konsistensi adalah memulai tanpa overthinking.",
-            "Berikan versi 100% dari kapasitasmu hari ini.",
-            "Langkah kecil berulang melahirkan lompatan besar.",
-            "Jaga arah kompas, abaikan gangguan kecil.",
-            "Kedisiplinan mengalahkan motivasi yang surut.",
-            "Nikmati proses bertumbuh yang sunyi.",
-            "Pilih tindakan, bukan penyesalan.",
-            "Hari ini penuh peluang jika mata dan pikiran terbuka.",
-            "Kendalikan pikiran sebelum pikiran mengendalikanmu.",
-            "Kesabaran dalam proses berbuah kematangan.",
-            "Jangan remehkan kekuatan centang tugas sederhana.",
-            "Ubah hambatan menjadi batu loncatan.",
-            "Syukuri proses, hadapi tantangan dengan senyuman.",
-            "Aksi nyata membungkam keraguan.",
-            "Fokus total pada tugas di depan mata.",
-            "Bangun fondasi kokoh untuk impian besar.",
-            "Keberhasilan adalah akumulasi kemenangan kecil.",
-            "Jadilah lebih baik 1% setiap harinya.",
-            "Rasa lelah akan hilang, hasil akan abadi.",
-            "Hadapi hari dengan energi dan optimisme.",
-            "Komitmen teruji saat rasa malas mendera.",
-            "Berinvestasi pada waktu luang untuk hal produktif.",
-            "Kendalikan waktu atau waktu yang mengendalikanmu.",
-            "Buat target realistis dan hantam setiap hari.",
-            "Ketekunan mengalahkan talenta yang malas.",
-            "Jaga fokus seperti sinar laser.",
-            "Semua keraguan sirna saat aksi dimulai.",
-            "Tuntaskan satu misi sebelum beralih ke yang lain.",
-            "Energi mengalir ke mana perhatian diarahkan.",
-            "Syukur membuat kapasitas mental meluas.",
-            "Kuasai dasar-dasar, hasil mahir akan datang.",
-            "Jangan biarkan hari berlalu tanpa kemajuan.",
-            "Bangun kebiasaan yang tidak butuh paksaan.",
-            "Tantang batasan dirimu dengan elegan.",
-            "Keberanian adalah mengambil tindakan meski takut.",
-            "Ketenangan batin lahir dari penyelesaian tugas.",
-            "Tetap rendah hati dan terus belajar.",
-            "Ciptakan momentum dari langkah pertama.",
-            "Waktu emas adalah sekarang.",
-            "Komitmen adalah janji pada diri sendiri.",
-            "Buat keputusan tegas dan jalankan.",
-            "Hapuskan distraksi, raih kejernihan.",
-            "Kerja keras cerdas melahirkan keajaiban.",
-            "Nikmati tantangan sebagai bentuk pelatihan.",
-            "Bangun otoritas atas fokus harianmu.",
-            "Jangan tunda kedamaian hati karena kelalaian.",
-            "Langkah berani membelah kabut ketidakpastian.",
-            "Hidup ini tentang eksekusi, bukan teori.",
-            "Jadilah nahkoda bagi pikiranmu sendiri.",
-            "Fokus pada pertumbuhan, bukan pengakuan.",
-            "Bangun sistem kerja yang meringankan beban mental.",
-            "Setiap usaha terekam dalam semesta.",
-            "Jaga stamina mental dengan istirahat terarah.",
-            "Keunggulan adalah kebiasaan, bukan kebetulan.",
-            "Ubah niat jadi tindakan seketika.",
-            "Hargai waktu sebagai aset paling berharga.",
-            "Bangun jembatan impian dengan batu kedisiplinan.",
-            "Jangan beri ruang untuk penundaan.",
-            "Kunci sukses ada pada ketahanan menerjang bosan.",
-            "Pilih bertumbuh atau diam dalam zona nyaman.",
-            "Kuasai diri, kuasai dunia kecilmu.",
-            "Langkah kecil terarah melibas jarak terjauh.",
-            "Rayakan setiap kemajuan kecil dengan bijak.",
-            "Fokus pada kualitas eksekusi.",
-            "Mantra hari ini: Selesaikan dan lampaui.",
-            "Masa depan cerah dicetak oleh tangan yang disiplin hari ini.",
-            "Tuntas dan berkualitas, itu standar barumu."
+            "Konsistensi kecil mengalahkan ledakan usaha sesaat.", "Setiap tugas yang dicentang adalah kemenangan atas diri sendiri.", "Progres lambat tetaplah progres. Jangan berhenti.", "Fokus pada satu hal, selesaikan dengan tuntas.", "Hari ini dirancang untuk lebih baik dari kemarin.",
+            "Disiplin adalah kebebasan dalam bentuk tindakan.", "Waktu terus berjalan, buat aksinya berarti.", "Lelah itu wajar, menyerah itu pilihan.", "Kecil setiap hari berbuah hasil luar biasa.", "Jangan tunggu sempurna, mulai dari sekarang.",
+            "Kekuatan terbesar lahir dari kebiasaan harian.", "Rencana tanpa aksi hanya angan-angan.", "Fokuskan energi pada apa yang bisa dikendalikan.", "Kegagalan hanya data untuk mencoba lebih cerdas.", "Satu langkah maju lebih baik dari diam di tempat.",
+            "Hargai proses, hasil akan mengikuti.", "Bangun versi terbaik dirimu secara diam-diam.", "Tenang, bernapas, dan eksekusi.", "Rasa malas musuh utama, taklukkan hari ini.", "Masa depan dibangun oleh kebiasaan hari ini.",
+            "Jangan bandingkan prosesmu dengan panggung orang lain.", "Berani gagal berarti berani bertumbuh.", "Kejernihan pikiran datang dari aksi nyata.", "Buat dirimu bangga saat melihat ke belakang nanti.", "Kualitas hidup ditentukan oleh kualitas keputusanmu.",
+            "Selesaikan yang tertunda, ringankan pikiran.", "Aksimu hari ini adalah penentu esok hari.", "Letih hari ini adalah fondasi sukses esok hari.", "Tegar di tengah proses yang melelahkan.", "Jadilah solusi bagi tantanganmu sendiri.",
+            "Fokus pada solusi, bukan pada keluhan.", "Setiap detik adalah peluang baru.", "Kunci konsistensi adalah memulai tanpa overthinking.", "Berikan versi 100% dari kapasitasmu hari ini.", "Langkah kecil berulang melahirkan lompatan besar.",
+            "Jaga arah kompas, abaikan gangguan kecil.", "Kedisiplinan mengalahkan motivasi yang surut.", "Nikmati proses bertumbuh yang sunyi.", "Pilih tindakan, bukan penyesalan.", "Hari ini penuh peluang jika mata dan pikiran terbuka.",
+            "Kendalikan pikiran sebelum pikiran mengendalikanmu.", "Kesabaran dalam proses berbuah kematangan.", "Jangan remehkan kekuatan centang tugas sederhana.", "Ubah hambatan menjadi batu loncatan.", "Syukuri proses, hadapi tantangan dengan senyuman.",
+            "Aksi nyata membungkam keraguan.", "Fokus total pada tugas di depan mata.", "Bangun fondasi kokoh untuk impian besar.", "Keberhasilan adalah akumulasi kemenangan kecil.", "Jadilah lebih baik 1% setiap harinya.",
+            "Rasa lelah akan hilang, hasil akan abadi.", "Hadapi hari dengan energi dan optimisme.", "Komitmen teruji saat rasa malas mendera.", "Berinvestasi pada waktu luang untuk hal produktif.", "Kendalikan waktu atau waktu yang mengendalikanmu.",
+            "Buat target realistis dan hantam setiap hari.", "Ketekunan mengalahkan talenta yang malas.", "Jaga fokus seperti sinar laser.", "Semua keraguan sirna saat aksi dimulai.", "Tuntaskan satu misi sebelum beralih ke yang lain.",
+            "Energi mengalir ke mana perhatian diarahkan.", "Syukur membuat kapasitas mental meluas.", "Kuasai dasar-dasar, hasil mahir akan datang.", "Jangan biarkan hari berlalu tanpa kemajuan.", "Bangun kebiasaan yang tidak butuh paksaan.",
+            "Tantang batasan dirimu dengan elegan.", "Keberanian adalah mengambil tindakan meski takut.", "Ketenangan binar lahir dari penyelesaian tugas.", "Tetap rendah hati dan terus belajar.", "Ciptakan momentum dari langkah pertama.",
+            "Waktu emas adalah sekarang.", "Komitmen adalah janji pada diri sendiri.", "Buat keputusan tegas dan jalankan.", "Hapuskan distraksi, raih kejernihan.", "Kerja keras cerdas melahirkan keajaiban.",
+            "Nikmati tantangan sebagai bentuk pelatihan.", "Bangun otoritas atas fokus harianmu.", "Jangan tunda kedamaian hati karena kelalaian.", "Langkah berani membelah kabut ketidakpastian.", "Hidup ini tentang eksekusi, bukan teori.",
+            "Jadilah nahkoda bagi pikiranmu sendiri.", "Fokus pada pertumbuhan, bukan pengakuan.", "Bangun sistem kerja yang meringankan beban mental.", "Setiap usaha terekam dalam semesta.", "Jaga stamina mental dengan istirahat terarah.",
+            "Keunggulan adalah kebiasaan, bukan kebetulan.", "Ubah niat jadi tindakan seketika.", "Hargai waktu sebagai aset paling berharga.", "Bangun jembatan impian dengan batu kedisiplinan.", "Jangan beri ruang untuk penundaan.",
+            "Kunci sukses ada pada ketahanan menerjang bosan.", "Pilih bertumbuh atau diam dalam zona nyaman.", "Kuasai diri, kuasai dunia kecilmu.", "Langkah kecil terarah melibas jarak terjauh.", "Rayakan setiap kemajuan kecil dengan bijak.",
+            "Fokus pada kualitas eksekusi.", "Mantra hari ini: Selesaikan dan lampaui.", "Masa depan cerah dicetak oleh tangan yang disiplin hari ini.", "Tuntas dan berkualitas, itu standar barumu."
         ];
 
         const indonesianHolidays = {
-            "01-01": "Tahun Baru Masehi",
-            "01-16": "Isra Mikraj Nabi",
-            "02-17": "Tahun Baru Imlek",
-            "03-19": "Hari Suci Nyepi",
-            "03-21": "Hari Raya Idul Fitri",
-            "03-22": "Hari Raya Idul Fitri",
-            "04-03": "Wafat Yesus Kristus",
-            "04-05": "Hari Paskah",
-            "05-01": "Hari Buruh Internasional",
-            "05-14": "Kenaikan Yesus Kristus",
-            "05-27": "Hari Raya Idul Adha",
-            "05-31": "Hari Raya Waisak",
-            "06-01": "Hari Lahir Pancasila",
-            "06-16": "Tahun Baru Islam",
-            "08-17": "Proklamasi Kemerdekaan RI",
-            "08-25": "Maulid Nabi Muhammad SAW [cite: 1.1.2]",
-            "12-25": "Hari Raya Natal"
+            "01-01": "Tahun Baru Masehi", "01-16": "Isra Mikraj Nabi", "02-17": "Tahun Baru Imlek", "03-19": "Hari Suci Nyepi", "03-21": "Hari Raya Idul Fitri",
+            "03-22": "Hari Raya Idul Fitri", "04-03": "Wafat Yesus Kristus", "04-05": "Hari Paskah", "05-01": "Hari Buruh Internasional", "05-14": "Kenaikan Yesus Kristus",
+            "05-27": "Hari Raya Idul Adha", "05-31": "Hari Raya Waisak", "06-01": "Hari Lahir Pancasila", "06-16": "Tahun Baru Islam", "08-17": "Proklamasi Kemerdekaan RI",
+            "08-25": "Maulid Nabi Muhammad SAW [cite: 1.1.2]", "12-25": "Hari Raya Natal"
         };
 
         function switchMobileTab(tab) {
@@ -650,40 +558,40 @@
             const btnTasks = document.getElementById('tab-btn-tasks');
             const btnStats = document.getElementById('tab-btn-stats');
 
+            const activeInput = document.activeElement;
+            if (activeInput && (activeInput.tagName === 'INPUT' || activeInput.tagName === 'TEXTAREA') && activeInput.closest('#panel-tasks')) {
+                return;
+            }
+
             [cal, tasks, stats].forEach(el => el.classList.add('hidden'));
+            [cal, tasks, stats].forEach(el => el.classList.remove('flex'));
+            
             [btnCal, btnTasks, btnStats].forEach(el => {
                 el.classList.remove('bg-sky-500/20', 'text-sky-300');
                 el.classList.add('text-slate-400');
             });
 
             if (tab === 'calendar') {
-                cal.classList.remove('hidden');
-                cal.classList.add('flex');
-                btnCal.classList.add('bg-sky-500/20', 'text-sky-300');
-                btnCal.classList.remove('text-slate-400');
+                cal.classList.remove('hidden'); cal.classList.add('flex');
+                btnCal.classList.add('bg-sky-500/20', 'text-sky-300'); btnCal.classList.remove('text-slate-400');
             } else if (tab === 'tasks') {
-                tasks.classList.remove('hidden');
-                tasks.classList.add('flex');
-                btnTasks.classList.add('bg-sky-500/20', 'text-sky-300');
-                btnTasks.classList.remove('text-slate-400');
+                tasks.classList.remove('hidden'); tasks.classList.add('flex');
+                btnTasks.classList.add('bg-sky-500/20', 'text-sky-300'); btnTasks.classList.remove('text-slate-400');
             } else if (tab === 'stats') {
-                stats.classList.remove('hidden');
-                stats.classList.add('flex');
-                btnStats.classList.add('bg-sky-500/20', 'text-sky-300');
-                btnStats.classList.remove('text-slate-400');
+                stats.classList.remove('hidden'); stats.classList.add('flex');
+                btnStats.classList.add('bg-sky-500/20', 'text-sky-300'); btnStats.classList.remove('text-slate-400');
             }
         }
 
+        let lastWidth = window.innerWidth;
         window.addEventListener('resize', () => {
-            if (window.innerWidth >= 1024) {
-                document.getElementById('panel-calendar').classList.remove('hidden');
-                document.getElementById('panel-calendar').classList.add('flex');
-                document.getElementById('panel-tasks').classList.remove('hidden');
-                document.getElementById('panel-tasks').classList.add('flex');
-                document.getElementById('panel-stats').classList.remove('hidden');
-                document.getElementById('panel-stats').classList.add('flex');
-            } else {
-                switchMobileTab('calendar');
+            if (window.innerWidth !== lastWidth) {
+                lastWidth = window.innerWidth;
+                if (window.innerWidth >= 1024) {
+                    document.getElementById('panel-calendar').classList.remove('hidden'); document.getElementById('panel-calendar').classList.add('flex');
+                    document.getElementById('panel-tasks').classList.remove('hidden'); document.getElementById('panel-tasks').classList.add('flex');
+                    document.getElementById('panel-stats').classList.remove('hidden'); document.getElementById('panel-stats').classList.add('flex');
+                }
             }
         });
 
@@ -693,12 +601,10 @@
             const delBtn = document.getElementById('delete-img-btn');
             
             if (savedImg && savedImg.trim() !== "") {
-                imgPreview.src = savedImg;
-                imgPreview.style.display = 'block';
+                imgPreview.src = savedImg; imgPreview.style.display = 'block';
                 if (delBtn) delBtn.classList.remove('hidden');
             } else {
-                imgPreview.src = '';
-                imgPreview.style.display = 'none';
+                imgPreview.src = ''; imgPreview.style.display = 'none';
                 if (delBtn) delBtn.classList.add('hidden');
             }
         }
@@ -708,8 +614,7 @@
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                const base64Data = e.target.result;
-                localStorage.setItem('userAffirmationImg', base64Data);
+                localStorage.setItem('userAffirmationImg', e.target.result);
                 loadAffirmationImage();
                 if (typeof AudioFx !== 'undefined') AudioFx.complete();
             };
@@ -735,30 +640,21 @@
 
             if (type === 'affirmation') {
                 title.innerHTML = `<i class="fa-solid fa-sparkles text-amber-400 mr-2"></i> Afirmasi Hari Ini`;
-                affContent.classList.remove('hidden');
-                noteContent.classList.add('hidden');
+                affContent.classList.remove('hidden'); noteContent.classList.add('hidden');
                 if(uploadBtn) uploadBtn.classList.remove('hidden');
                 if(shuffleBtn) shuffleBtn.classList.remove('hidden');
-                loadAffirmationImage();
-                randomAffirmation(false);
+                loadAffirmationImage(); randomAffirmation(false);
             } else if (type === 'note') {
                 title.innerHTML = `<i class="fa-solid fa-book-open text-emerald-400 mr-2"></i> Catatan & Refleksi`;
-                affContent.classList.add('hidden');
-                noteContent.classList.remove('hidden');
+                affContent.classList.add('hidden'); noteContent.classList.remove('hidden');
                 if(uploadBtn) uploadBtn.classList.add('hidden');
                 if(shuffleBtn) shuffleBtn.classList.add('hidden');
                 document.getElementById('user-note-area').value = localStorage.getItem('userDailyNote') || '';
             }
         }
 
-        function closeModal() {
-            document.getElementById('app-modal').classList.remove('active');
-            AudioFx.click();
-        }
-
-        function closeModalOnBg(e) {
-            if (e.target.id === 'app-modal') closeModal();
-        }
+        function closeModal() { document.getElementById('app-modal').classList.remove('active'); AudioFx.click(); }
+        function closeModalOnBg(e) { if (e.target.id === 'app-modal') closeModal(); }
 
         function randomAffirmation(isManual = false) {
             const todayStr = formatDate(new Date());
@@ -769,8 +665,7 @@
             if (!isManual && savedDailyDate === todayStr && savedDailyQuote) {
                 chosenQuote = savedDailyQuote;
             } else {
-                const randomIndex = Math.floor(Math.random() * quotesPool.length);
-                chosenQuote = quotesPool[randomIndex];
+                chosenQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
                 if (!isManual) {
                     localStorage.setItem('dailyQuote_' + todayStr, chosenQuote);
                     localStorage.setItem('dailyQuoteDate', todayStr);
@@ -781,10 +676,8 @@
         }
 
         function saveUserNote() {
-            const text = document.getElementById('user-note-area').value;
-            localStorage.setItem('userDailyNote', text);
-            closeModal();
-            AudioFx.complete();
+            localStorage.setItem('userDailyNote', document.getElementById('user-note-area').value);
+            closeModal(); AudioFx.complete();
         }
 
         const AudioFx = {
@@ -794,40 +687,30 @@
                     const AudioContext = window.AudioContext || window.webkitAudioContext;
                     this.ctx = new AudioContext();
                 }
-                if (this.ctx.state === 'suspended') {
-                    this.ctx.resume();
-                }
+                if (this.ctx.state === 'suspended') this.ctx.resume();
             },
             click() {
                 try {
                     this.init();
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(650, this.ctx.currentTime);
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(650, this.ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 0.045);
                     gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.045);
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.045);
+                    osc.connect(gain); gain.connect(this.ctx.destination);
+                    osc.start(); osc.stop(this.ctx.currentTime + 0.045);
                 } catch(e) {}
             },
             hover() {
                 try {
                     this.init();
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(350, this.ctx.currentTime);
+                    const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(350, this.ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(500, this.ctx.currentTime + 0.025);
                     gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.025);
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.025);
+                    osc.connect(gain); gain.connect(this.ctx.destination);
+                    osc.start(); osc.stop(this.ctx.currentTime + 0.025);
                 } catch(e) {}
             },
             complete() {
@@ -835,16 +718,12 @@
                     this.init();
                     const now = this.ctx.currentTime;
                     [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-                        const osc = this.ctx.createOscillator();
-                        const gain = this.ctx.createGain();
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, now + idx * 0.06);
                         gain.gain.setValueAtTime(0.45, now + idx * 0.06);
                         gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.25);
-                        osc.connect(gain);
-                        gain.connect(this.ctx.destination);
-                        osc.start(now + idx * 0.06);
-                        osc.stop(now + idx * 0.06 + 0.25);
+                        osc.connect(gain); gain.connect(this.ctx.destination);
+                        osc.start(now + idx * 0.06); osc.stop(now + idx * 0.06 + 0.18);
                     });
                 } catch(e) {}
             }
@@ -852,26 +731,18 @@
 
         document.addEventListener('mouseover', (e) => {
             if (e.target.closest('.dark-day, .dark-btn, .cb-custom, button, select, input, label')) {
-                if (!e.target._hvd) {
-                    e.target._hvd = true;
-                    AudioFx.hover();
-                    setTimeout(() => e.target._hvd = false, 180);
-                }
+                if (!e.target._hvd) { e.target._hvd = true; AudioFx.hover(); setTimeout(() => e.target._hvd = false, 180); }
             }
         });
-
         document.addEventListener('click', (e) => {
-            if (e.target.closest('.dark-day, .dark-btn, .cb-custom, button, select, label')) {
-                AudioFx.click();
-            }
+            if (e.target.closest('.dark-day, .dark-btn, .cb-custom, button, select, label')) AudioFx.click();
         });
 
         let currentDate = new Date();
         let selectedDateStr = "";
-        
-        let dailyTasks = JSON.parse(localStorage.getItem('darkSplitLayoutDaily_v2')) || {};
-        let routineTasks = JSON.parse(localStorage.getItem('darkSplitLayoutRoutineList_v2')) || [];
-        let routineStatus = JSON.parse(localStorage.getItem('darkSplitLayoutRoutineStatus_v2')) || {}; 
+        let dailyTasks = JSON.parse(localStorage.getItem('darkFinalMasterDaily')) || {};
+        let routineTasks = JSON.parse(localStorage.getItem('darkFinalMasterRoutineList')) || [];
+        let routineStatus = JSON.parse(localStorage.getItem('darkFinalMasterRoutineStatus')) || {}; 
 
         const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         const shortMonths = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
@@ -883,11 +754,7 @@
 
         function init() {
             selectedDateStr = formatDate(new Date());
-            calculateStreak();
-            renderCalendar();
-            renderTasks(selectedDateStr);
-            renderMonthlyProgress();
-            renderDailySidebar(selectedDateStr);
+            calculateStreak(); renderCalendar(); renderTasks(selectedDateStr); renderMonthlyProgress(); renderDailySidebar(selectedDateStr);
             if (window.innerWidth < 1024) switchMobileTab('calendar');
         }
 
@@ -896,12 +763,10 @@
         }
 
         function saveData() {
-            localStorage.setItem('darkSplitLayoutDaily_v2', JSON.stringify(dailyTasks));
-            localStorage.setItem('darkSplitLayoutRoutineList_v2', JSON.stringify(routineTasks));
-            localStorage.setItem('darkSplitLayoutRoutineStatus_v2', JSON.stringify(routineStatus));
-            calculateStreak();
-            renderMonthlyProgress();
-            renderDailySidebar(selectedDateStr);
+            localStorage.setItem('darkFinalMasterDaily', JSON.stringify(dailyTasks));
+            localStorage.setItem('darkFinalMasterRoutineList', JSON.stringify(routineTasks));
+            localStorage.setItem('darkFinalMasterRoutineStatus', JSON.stringify(routineStatus));
+            calculateStreak(); renderMonthlyProgress(); renderDailySidebar(selectedDateStr);
         }
 
         function calculateStreak() {
@@ -918,14 +783,11 @@
         function getStatsForDate(dateStr) {
             let dTasks = dailyTasks[dateStr] || [];
             let total = routineTasks.length + dTasks.length;
-            
             let uncompletedRoutines = routineTasks.filter(r => !(routineStatus[dateStr] || []).includes(r.id));
             let uncompletedDailies = dTasks.filter(t => !t.done);
-
             let rCompleted = routineStatus[dateStr] ? routineStatus[dateStr].length : 0;
             let dCompleted = dTasks.filter(t => t.done).length;
             let completed = rCompleted + dCompleted;
-
             return { total, completed, progress: total > 0 ? (completed / total) * 100 : 0, uncompletedRoutines, uncompletedDailies };
         }
 
@@ -936,8 +798,7 @@
             let pct = Math.round(stats.progress);
             document.getElementById('daily-sidebar-text').innerText = `${pct}%`;
             
-            const radius = 42;
-            const circumference = 2 * Math.PI * radius;
+            const radius = 42; const circumference = 2 * Math.PI * radius;
             const offset = circumference - (pct / 100) * circumference;
             const giantRing = document.getElementById('sidebar-giant-ring');
             if(giantRing) {
@@ -948,20 +809,15 @@
         }
 
         function renderMonthlyProgress() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
+            const year = currentDate.getFullYear(); const month = currentDate.getMonth();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            let totalTasksMonth = 0;
-            let completedTasksMonth = 0;
-            const chartBarsEl = document.getElementById('monthly-chart-bars');
-            chartBarsEl.innerHTML = '';
+            let totalTasksMonth = 0; let completedTasksMonth = 0;
+            const chartBarsEl = document.getElementById('monthly-chart-bars'); chartBarsEl.innerHTML = '';
 
             for (let i = 1; i <= daysInMonth; i++) {
                 let dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 let stats = getStatsForDate(dateStr);
-                totalTasksMonth += stats.total;
-                completedTasksMonth += stats.completed;
-
+                totalTasksMonth += stats.total; completedTasksMonth += stats.completed;
                 let pctDay = Math.round(stats.progress);
                 let barColor = pctDay === 100 ? '#10b981' : (pctDay > 0 ? '#38bdf8' : '#334155');
                 chartBarsEl.innerHTML += `<div class="monthly-chart-bar" style="height: ${Math.max(6, pctDay)}%; background-color: ${barColor};" title="Tgl ${i}: ${pctDay}%"></div>`;
@@ -974,42 +830,25 @@
         }
 
         function getPriorityColorHex(prio) {
-            if(prio === 'high') return '#ef4444';
-            if(prio === 'low') return '#3b82f6';
-            return '#f59e0b';
+            if(prio === 'high') return '#ef4444'; if(prio === 'low') return '#3b82f6'; return '#f59e0b';
         }
 
-        // Mega Cell Celebration Burst inside specific cell
         function triggerCellMegaCelebration(dateStr) {
             const els = document.querySelectorAll(`[data-date-str="${dateStr}"]`);
             els.forEach(el => {
-                el.classList.remove('cell-pop-animation');
-                void el.offsetWidth;
-                el.classList.add('cell-pop-animation');
-                
+                el.classList.remove('cell-pop-animation'); void el.offsetWidth; el.classList.add('cell-pop-animation');
                 const rect = el.getBoundingClientRect();
                 const x = (rect.left + rect.width / 2) / window.innerWidth;
                 const y = (rect.top + rect.height / 2) / window.innerHeight;
-
-                confetti({
-                    particleCount: 50,
-                    angle: 90,
-                    spread: 80,
-                    origin: { x: x, y: y },
-                    colors: ['#34d399', '#38bdf8', '#f59e0b', '#fde047', '#a78bfa']
-                });
+                confetti({ particleCount: 50, angle: 90, spread: 80, origin: { x: x, y: y }, colors: ['#34d399', '#38bdf8', '#f59e0b', '#fde047', '#a78bfa'] });
             });
         }
 
         function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
+            const year = currentDate.getFullYear(); const month = currentDate.getMonth();
             document.getElementById('month-year-display').innerText = `${monthNames[month]} ${year}`;
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = '';
+            const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const grid = document.getElementById('calendar-grid'); grid.innerHTML = '';
             const todayStr = formatDate(new Date());
 
             for (let i = 0; i < firstDay; i++) {
@@ -1017,21 +856,14 @@
             }
 
             for (let i = 1; i <= daysInMonth; i++) {
-                const mm = String(month + 1).padStart(2, '0');
-                const dd = String(i).padStart(2, '0');
-                const mdKey = `${mm}-${dd}`;
-                const holidayName = indonesianHolidays[mdKey];
-
+                const mm = String(month + 1).padStart(2, '0'); const dd = String(i).padStart(2, '0');
+                const mdKey = `${mm}-${dd}`; const holidayName = indonesianHolidays[mdKey];
                 let dateStr = `${year}-${mm}-${dd}`;
-                let isToday = dateStr === todayStr;
-                let isPast = dateStr < todayStr;
-                let isSelected = dateStr === selectedDateStr;
-                let dayOfWeek = new Date(year, month, i).getDay();
-                let isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                let isToday = dateStr === todayStr; let isPast = dateStr < todayStr; let isSelected = dateStr === selectedDateStr;
+                let dayOfWeek = new Date(year, month, i).getDay(); let isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
                 let isHolidayID = Boolean(holidayName);
                 
-                let stats = getStatsForDate(dateStr);
-                let pct = Math.round(stats.progress);
+                let stats = getStatsForDate(dateStr); let pct = Math.round(stats.progress);
                 let isComplete100 = stats.total > 0 && stats.completed === stats.total;
 
                 let completeCheckOverlay = isComplete100 ? `
@@ -1047,7 +879,6 @@
                 let todayNumClass = isToday ? 'is-today-num' : '';
                 let borderStateClass = isPast && !isComplete100 ? 'past-date' : 'active-day-border';
                 let greenCompleteClass = isComplete100 ? 'all-complete-green' : '';
-
                 let holidayBadgeHtml = holidayName ? `<span class="holiday-badge" title="${holidayName}">${holidayName}</span>` : '';
 
                 let bottomContent = '';
@@ -1062,10 +893,11 @@
                     bottomContent = `<div class="flex flex-col gap-0.5 mt-auto">${rRow}${dRow}</div>`;
                 }
 
+                let ringColorClass = isComplete100 ? 'stroke-emerald-400' : 'stroke-sky-400';
+
                 grid.innerHTML += `
                     <div class="dark-day relative overflow-hidden ${borderStateClass} ${greenCompleteClass} ${todayActiveClass} ${selectStyle} ${weekendClass}" 
-                         data-date-str="${dateStr}"
-                         onclick="selectDate('${dateStr}')">
+                         data-date-str="${dateStr}" onclick="selectDate('${dateStr}')">
                         <div class="flex justify-between items-start z-10 w-full">
                             <div class="flex flex-col min-w-0">
                                 <span class="active-date-num ${todayNumClass} font-black leading-none">${i}</span>
@@ -1082,20 +914,13 @@
                     </div>
                 `;
             }
-            renderMonthlyProgress();
-            renderDailySidebar(selectedDateStr);
+            renderMonthlyProgress(); renderDailySidebar(selectedDateStr);
         }
 
         function changeMonth(dir) { currentDate.setMonth(currentDate.getMonth() + dir); renderCalendar(); }
         
         function selectDate(dateStr) {
-            selectedDateStr = dateStr;
-            renderCalendar();
-            renderTasks(dateStr);
-            renderDailySidebar(dateStr);
-            if (window.innerWidth < 1024) {
-                switchMobileTab('tasks');
-            }
+            selectedDateStr = dateStr; renderCalendar(); renderTasks(dateStr); renderDailySidebar(dateStr);
         }
 
         function renderTasks(dateStr) {
@@ -1109,13 +934,12 @@
                 let completedArr = routineStatus[dateStr] || [];
                 rList.innerHTML = routineTasks.map(t => {
                     let isDone = completedArr.includes(t.id);
-                    let formattedText = toCapitalEachWord(t.text);
                     let prioClass = `priority-${t.priority || 'medium'}`;
                     return `
                     <div class="flex flex-col gap-1 p-2.5 rounded-xl bg-slate-900/60 ${prioClass}">
                         <div class="flex items-center gap-2">
                             <input type="checkbox" class="cb-custom" ${isDone ? 'checked' : ''} onchange="toggleRoutine('${dateStr}', ${t.id}, this.checked)">
-                            <span class="flex-grow text-xs md:text-sm leading-tight task-text-item ${isDone ? 'task-done' : ''}">${formattedText}</span>
+                            <span class="flex-grow text-xs md:text-sm leading-tight task-text-item ${isDone ? 'task-done' : ''}">${toCapitalEachWord(t.text)}</span>
                             <button class="text-slate-500 hover:text-rose-400 px-1 text-xs" onclick="deleteRoutine(${t.id})"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                         ${t.deadline ? `<div class="text-[10px] text-slate-400 pl-7"><i class="fa-regular fa-clock mr-1"></i>DL: ${toCapitalEachWord(t.deadline)}</div>` : ''}
@@ -1129,13 +953,12 @@
                 dList.innerHTML = `<div class="py-4 text-center text-xs text-slate-500">Kosong untuk tanggal ini</div>`;
             } else {
                 dList.innerHTML = dTasks.map((t, index) => {
-                    let formattedText = toCapitalEachWord(t.text);
                     let prioClass = `priority-${t.priority || 'medium'}`;
                     return `
                     <div class="flex flex-col gap-1 p-2.5 rounded-xl bg-slate-900/60 ${prioClass}">
                         <div class="flex items-center gap-2">
                             <input type="checkbox" class="cb-custom" ${t.done ? 'checked' : ''} onchange="toggleDaily('${dateStr}', ${index}, this.checked)">
-                            <span class="flex-grow text-xs md:text-sm leading-tight task-text-item ${t.done ? 'task-done' : ''}">${formattedText}</span>
+                            <span class="flex-grow text-xs md:text-sm leading-tight task-text-item ${t.done ? 'task-done' : ''}">${toCapitalEachWord(t.text)}</span>
                             <button class="text-slate-500 hover:text-rose-400 px-1 text-xs" onclick="deleteDaily('${dateStr}', ${index})"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                         ${t.deadline ? `<div class="text-[10px] text-slate-400 pl-7"><i class="fa-regular fa-clock mr-1"></i>DL: ${toCapitalEachWord(t.deadline)}</div>` : ''}
@@ -1147,31 +970,11 @@
         function triggerMegaParty(dateStr) {
             AudioFx.complete();
             const body = document.getElementById('app-body');
-            body.classList.remove('party-flash');
-            void body.offsetWidth; 
-            body.classList.add('party-flash');
-
-            // Cell pop & micro-burst
+            body.classList.remove('party-flash'); void body.offsetWidth; body.classList.add('party-flash');
             triggerCellMegaCelebration(dateStr);
-
-            // Global massive celebration
-            var count = 220;
-            var defaults = {
-                origin: { y: 0.5 },
-                colors: ['#38bdf8', '#34d399', '#f59e0b', '#ef4444', '#818cf8', '#10b981', '#ec4899', '#fde047']
-            };
-
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, {
-                    particleCount: Math.floor(count * particleRatio)
-                }));
-            }
-
-            fire(0.3, { spread: 50, startVelocity: 60 });
-            fire(0.2, { spread: 90 });
-            fire(0.35, { spread: 130, decay: 0.9, scalar: 0.9 });
-            fire(0.15, { spread: 150, startVelocity: 35 });
-            
+            const count = 220; const defaults = { origin: { y: 0.5 }, colors: ['#38bdf8', '#34d399', '#f59e0b', '#ef4444', '#818cf8', '#10b981', '#ec4899', '#fde047'] };
+            function fire(particleRatio, opts) { confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) })); }
+            fire(0.3, { spread: 50, startVelocity: 60 }); fire(0.2, { spread: 90 }); fire(0.35, { spread: 130, decay: 0.9, scalar: 0.9 });
             setTimeout(() => {
                 confetti({ particleCount: 100, angle: 60, spread: 70, origin: { x: 0, y: 0.8 }, colors: defaults.colors });
                 confetti({ particleCount: 100, angle: 120, spread: 70, origin: { x: 1, y: 0.8 }, colors: defaults.colors });
@@ -1180,33 +983,20 @@
 
         function checkAndTriggerDayCompletion(dateStr) {
             const stats = getStatsForDate(dateStr);
-            if (stats.total > 0 && stats.completed === stats.total) {
-                triggerMegaParty(dateStr);
-            } else {
-                AudioFx.complete();
-            }
+            if (stats.total > 0 && stats.completed === stats.total) triggerMegaParty(dateStr);
+            else AudioFx.complete();
         }
 
         function toggleRoutine(dateStr, id, isDone) {
             if(!routineStatus[dateStr]) routineStatus[dateStr] = [];
-            if (isDone) { 
-                routineStatus[dateStr].push(id); 
-                checkAndTriggerDayCompletion(dateStr);
-            } 
-            else { 
-                routineStatus[dateStr] = routineStatus[dateStr].filter(tid => tid !== id); 
-                AudioFx.click();
-            }
+            if (isDone) { routineStatus[dateStr].push(id); checkAndTriggerDayCompletion(dateStr); } 
+            else { routineStatus[dateStr] = routineStatus[dateStr].filter(tid => tid !== id); AudioFx.click(); }
             saveData(); renderCalendar(); renderTasks(dateStr); renderDailySidebar(dateStr);
         }
 
         function toggleDaily(dateStr, index, isDone) {
             dailyTasks[dateStr][index].done = isDone;
-            if (isDone) {
-                checkAndTriggerDayCompletion(dateStr);
-            } else {
-                AudioFx.click();
-            }
+            if (isDone) checkAndTriggerDayCompletion(dateStr); else AudioFx.click();
             saveData(); renderCalendar(); renderTasks(dateStr); renderDailySidebar(dateStr);
         }
 
@@ -1216,8 +1006,7 @@
             const dl = document.getElementById('routine-deadline').value;
             if (!input.value.trim()) return;
             routineTasks.push({ id: Date.now(), text: toCapitalEachWord(input.value), priority: prio, deadline: toCapitalEachWord(dl) });
-            input.value = document.getElementById('routine-deadline').value = ''; 
-            saveData(); renderCalendar(); renderTasks(selectedDateStr); renderDailySidebar(selectedDateStr);
+            input.value = document.getElementById('routine-deadline').value = ''; saveData(); renderCalendar(); renderTasks(selectedDateStr); renderDailySidebar(selectedDateStr);
         }
 
         function addDaily() {
@@ -1227,8 +1016,7 @@
             if (!input.value.trim()) return;
             if (!dailyTasks[selectedDateStr]) dailyTasks[selectedDateStr] = [];
             dailyTasks[selectedDateStr].push({ text: toCapitalEachWord(input.value), done: false, priority: prio, deadline: toCapitalEachWord(dl) });
-            input.value = document.getElementById('daily-deadline').value = ''; 
-            saveData(); renderCalendar(); renderTasks(selectedDateStr); renderDailySidebar(selectedDateStr);
+            input.value = document.getElementById('daily-deadline').value = ''; saveData(); renderCalendar(); renderTasks(selectedDateStr); renderDailySidebar(selectedDateStr);
         }
 
         function deleteRoutine(id) {
@@ -1246,56 +1034,43 @@
         }
 
         function handleKeyPress(e, type) {
-            if (e.key === 'Enter') {
-                if(type === 'routine') addRoutine();
-                if(type === 'daily') addDaily();
-            }
+            if (e.key === 'Enter') { if(type === 'routine') addRoutine(); if(type === 'daily') addDaily(); }
         }
 
-        /* --- POMODORO TIMER --- */
         let timerInterval; let timeRemaining = 25 * 60; let isRunning = false;
         function updateTimerDisplay() {
             let m = Math.floor(timeRemaining / 60); let s = timeRemaining % 60;
             document.getElementById('timer-display').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
         function toggleTimer() {
-            const icon = document.getElementById('play-icon');
-            const label = document.getElementById('play-label');
-            if (isRunning) {
-                clearInterval(timerInterval); icon.className = 'fa-solid fa-play text-xs'; label.innerText = 'Mulai';
-            } else {
+            const icon = document.getElementById('play-icon'); const label = document.getElementById('play-label');
+            if (isRunning) { clearInterval(timerInterval); icon.className = 'fa-solid fa-play text-xs'; label.innerText = 'Mulai'; }
+            else {
                 icon.className = 'fa-solid fa-pause text-xs'; label.innerText = 'Jeda';
                 timerInterval = setInterval(() => {
                     if (timeRemaining > 0) { timeRemaining--; updateTimerDisplay(); }
-                    else {
-                        clearInterval(timerInterval); triggerMegaParty(formatDate(new Date()));
-                        alert("Sesi fokus selesai!"); resetTimer();
-                    }
+                    else { clearInterval(timerInterval); triggerMegaParty(formatDate(new Date())); alert("Sesi fokus selesai!"); resetTimer(); }
                 }, 1000);
             }
             isRunning = !isRunning;
         }
         function resetTimer() { 
             clearInterval(timerInterval); timeRemaining = 25 * 60; isRunning = false; 
-            document.getElementById('play-icon').className = 'fa-solid fa-play text-xs'; 
-            document.getElementById('play-label').innerText = 'Mulai';
-            updateTimerDisplay(); 
+            document.getElementById('play-icon').className = 'fa-solid fa-play text-xs'; document.getElementById('play-label').innerText = 'Mulai'; updateTimerDisplay(); 
         }
 
-        /* --- EXCEL EXPORT / IMPORT --- */
         function exportData() {
             let exportArr = [];
             for(let date in dailyTasks) dailyTasks[date].forEach(t => exportArr.push({ Tanggal: date, Tipe: "Harian", Tugas: t.text, Prioritas: t.priority, Deadline: t.deadline, Status: t.done ? "Selesai" : "Belum" }));
             for(let date in routineStatus) routineStatus[date].forEach(id => { let r = routineTasks.find(x => x.id === id); if(r) exportArr.push({ Tanggal: date, Tipe: "Rutin", Tugas: r.text, Prioritas: r.priority, Deadline: r.deadline, Status: "Selesai" }); });
             if(exportArr.length === 0) return alert("Tidak ada data untuk diekspor.");
             const ws = XLSX.utils.json_to_sheet(exportArr); const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Progres"); XLSX.writeFile(wb, "Dark_Mega_Celebration.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Progres"); XLSX.writeFile(wb, "Mega_Planner_Data.xlsx");
         }
-        function importData(e) {
-            alert("Fitur import disesuaikan dengan format sistem."); e.target.value = "";
-        }
+        function importData(e) { alert("Fitur import disesuaikan dengan format sistem."); e.target.value = ""; }
 
         init();
     </script>
 </body>
 </html>
+```[cite: 1.1.2]
