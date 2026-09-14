@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catatan Progres - Fullscreen Libur ID & Green Completion</title>
+    <title>Catatan Progres - Responsive Mobile & Desktop</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -37,9 +37,8 @@
         body {
             background-color: #0f172a;
             color: #f8fafc;
-            overflow: hidden;
             user-select: none;
-            font-size: 15px;
+            font-size: 14px;
             transition: background-color 0.2s;
         }
 
@@ -52,19 +51,25 @@
         }
 
         .month-header-giant {
-            font-size: 2.25rem;
+            font-size: 1.5rem;
             font-weight: 900;
             letter-spacing: 0.05em;
             color: #f8fafc;
             text-transform: uppercase;
             text-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
         }
+        @media (min-width: 768px) {
+            .month-header-giant { font-size: 2.25rem; }
+        }
 
         .section-header {
-            font-size: 1.25rem;
+            font-size: 1rem;
             font-weight: 800;
             letter-spacing: 0.03em;
             color: #f8fafc;
+        }
+        @media (min-width: 768px) {
+            .section-header { font-size: 1.25rem; }
         }
 
         .dark-btn {
@@ -81,15 +86,18 @@
 
         .dark-day {
             background-color: rgba(30, 41, 59, 0.9);
-            border-radius: 0.85rem;
+            border-radius: 0.65rem;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 10px;
-            height: 100%;
+            padding: 6px;
+            min-height: 75px;
             position: relative;
+        }
+        @media (min-width: 768px) {
+            .dark-day { border-radius: 0.85rem; padding: 10px; min-height: 95px; }
         }
         
         .dark-day.past-date {
@@ -109,7 +117,7 @@
             box-shadow: inset 0 0 8px rgba(56, 189, 248, 0.1);
         }
 
-        .dark-day:hover { transform: scale(1.04) translateY(-2px); background-color: rgba(51, 65, 85, 1); z-index: 10; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.6); border-color: #38bdf8 !important; }
+        .dark-day:hover { transform: scale(1.02) translateY(-1px); background-color: rgba(51, 65, 85, 1); z-index: 10; border-color: #38bdf8 !important; }
         
         .dark-day.is-today-active {
             border: 2.5px solid #f59e0b !important;
@@ -121,25 +129,21 @@
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(244, 63, 94, 0.08)) !important; 
             border-color: rgba(239, 68, 68, 0.45) !important; 
         }
-        .dark-day.weekend.all-complete-green, .dark-day.holiday-id.all-complete-green {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(6, 95, 70, 0.35)) !important;
-            border: 2px solid #34d399 !important;
-        }
-
         .dark-day.holiday-id .active-date-num { color: #f87171 !important; }
 
-        .active-date-num { color: #f8fafc; font-weight: 900; }
+        .active-date-num { color: #f8fafc; font-weight: 900; font-size: 1.25rem; }
+        @media (min-width: 768px) { .active-date-num { font-size: 1.75rem; } }
         .active-date-num.is-today-num { color: #fbbf24; text-shadow: 0 0 8px rgba(251, 191, 36, 0.5); }
 
         .holiday-badge {
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 800;
             background: rgba(239, 68, 68, 0.25);
             color: #fca5a5;
-            padding: 1px 4px;
-            border-radius: 4px;
+            padding: 1px 3px;
+            border-radius: 3px;
             display: inline-block;
-            margin-top: 2px;
+            margin-top: 1px;
             max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -157,18 +161,19 @@
             opacity: 0.9;
         }
 
-        .giant-ring-svg { transform: rotate(-90deg); width: 140px; height: 140px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
-        .giant-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 14; }
+        .giant-ring-svg { transform: rotate(-90deg); width: 100px; height: 100px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
+        @media (min-width: 768px) { .giant-ring-svg { width: 130px; height: 130px; } }
+        .giant-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 12; }
         .giant-ring-segment { fill: none; stroke-linecap: round; transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
         .monthly-chart-container {
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
-            height: 52px;
-            gap: 2px;
+            height: 44px;
+            gap: 1.5px;
             background: rgba(15, 23, 42, 0.4);
-            padding: 4px;
+            padding: 3px;
             border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.08);
         }
@@ -177,23 +182,23 @@
             background-color: #334155;
             border-radius: 2px 2px 0 0;
             transition: height 0.3s ease, background-color 0.3s ease;
-            min-height: 4px;
+            min-height: 3px;
         }
 
-        .priority-high { border-left: 5px solid #ef4444 !important; background: rgba(239, 68, 68, 0.08) !important; border: 1.5px solid rgba(239, 68, 68, 0.25); border-left-width: 5px !important; }
-        .priority-high .task-text-item { color: #fca5a5 !important; font-weight: 700; text-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+        .priority-high { border-left: 4px solid #ef4444 !important; background: rgba(239, 68, 68, 0.08) !important; border: 1.5px solid rgba(239, 68, 68, 0.25); border-left-width: 4px !important; }
+        .priority-high .task-text-item { color: #fca5a5 !important; font-weight: 700; text-shadow: 0 0 6px rgba(239, 68, 68, 0.4); }
 
-        .priority-medium { border-left: 5px solid #f59e0b !important; background: rgba(245, 158, 11, 0.08) !important; border: 1.5px solid rgba(245, 158, 11, 0.25); border-left-width: 5px !important; }
-        .priority-medium .task-text-item { color: #fde047 !important; font-weight: 700; text-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+        .priority-medium { border-left: 4px solid #f59e0b !important; background: rgba(245, 158, 11, 0.08) !important; border: 1.5px solid rgba(245, 158, 11, 0.25); border-left-width: 4px !important; }
+        .priority-medium .task-text-item { color: #fde047 !important; font-weight: 700; text-shadow: 0 0 6px rgba(245, 158, 11, 0.4); }
 
-        .priority-low { border-left: 5px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.08) !important; border: 1.5px solid rgba(59, 130, 246, 0.25); border-left-width: 5px !important; }
-        .priority-low .task-text-item { color: #93c5fd !important; font-weight: 700; text-shadow: 0 0 8px rgba(59, 130, 246, 0.4); }
+        .priority-low { border-left: 4px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.08) !important; border: 1.5px solid rgba(59, 130, 246, 0.25); border-left-width: 4px !important; }
+        .priority-low .task-text-item { color: #93c5fd !important; font-weight: 700; text-shadow: 0 0 6px rgba(59, 130, 246, 0.4); }
 
         .cb-custom {
             appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 7px;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
             border: 2px solid #64748b;
             background-color: #0f172a;
             cursor: pointer;
@@ -204,13 +209,13 @@
         .cb-custom:checked {
             background-color: #38bdf8;
             border-color: #38bdf8;
-            transform: scale(1.15) rotate(5deg);
+            transform: scale(1.1) rotate(5deg);
         }
         .cb-custom:checked::after {
             content: '✓';
             color: #0f172a;
             font-weight: 800;
-            font-size: 15px;
+            font-size: 13px;
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
@@ -218,7 +223,7 @@
 
         .task-done { text-decoration: line-through; opacity: 0.45; color: #94a3b8 !important; text-shadow: none !important; }
 
-        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
 
@@ -235,109 +240,115 @@
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(10px);
             z-index: 50; display: flex; align-items: center; justify-content: center;
-            opacity: 0.0; pointer-events: none; transition: opacity 0.3s ease; padding: 1.5rem;
+            opacity: 0.0; pointer-events: none; transition: opacity 0.3s ease; padding: 1rem;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-box-full {
             transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 95vw; height: 92vh; background: #1e293b; border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 1.5rem; padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+            width: 100%; max-width: 95vw; height: 92vh; background: #1e293b; border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 1.25rem; padding: 1.25rem; box-shadow: 0 25px 50px rgba(0,0,0,0.7);
             display: flex; flex-direction: column; overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .modal-box-full { padding: 2rem; width: 95vw; height: 92vh; border-radius: 1.5rem; }
         }
         .modal-overlay.active .modal-box-full { transform: scale(1); }
 
         .neon-glow-text {
             color: #38bdf8;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.7), 0 0 20px rgba(56, 189, 248, 0.4);
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
         }
         .neon-glow-yellow {
             color: #fde047;
-            text-shadow: 0 0 8px rgba(253, 224, 71, 0.8), 0 0 18px rgba(253, 224, 71, 0.5), 0 0 28px rgba(253, 224, 71, 0.3);
-        }
-        .neon-glow-emerald {
-            color: #34d399;
-            text-shadow: 0 0 10px rgba(52, 211, 153, 0.7), 0 0 20px rgba(52, 211, 153, 0.4);
+            text-shadow: 0 0 8px rgba(253, 224, 71, 0.8);
         }
     </style>
 </head>
-<body id="app-body" class="h-screen w-screen flex p-4 gap-4 text-base antialiased relative">
+<body id="app-body" class="min-h-screen lg:h-screen w-screen flex flex-col lg:flex-row p-2.5 md:p-4 gap-3 md:gap-4 text-sm md:text-base antialiased overflow-y-auto lg:overflow-hidden">
 
-    <!-- LEFT SIDEBAR -->
-    <aside class="w-1/4 flex flex-col gap-4 h-full">
-        <div class="dark-card p-5 flex flex-col justify-between shrink-0">
+    <!-- MOBILE TAB NAVIGATION (Visible on mobile only) -->
+    <div class="flex lg:hidden bg-dark-card p-1.5 rounded-xl border border-white/20 shrink-0 gap-1">
+        <button id="tab-btn-cal" class="flex-1 py-2 text-xs font-bold rounded-lg bg-sky-500/20 text-sky-300 transition-all" onclick="switchMobileTab('calendar')"><i class="fa-solid fa-calendar mr-1"></i> Kalender</button>
+        <button id="tab-btn-tasks" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 transition-all" onclick="switchMobileTab('tasks')"><i class="fa-solid fa-list-check mr-1"></i> Tugas</button>
+        <button id="tab-btn-stats" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 transition-all" onclick="switchMobileTab('stats')"><i class="fa-solid fa-chart-pie mr-1"></i> Progres</button>
+    </div>
+
+    <!-- LEFT SIDEBAR / STATS PANEL -->
+    <aside id="panel-stats" class="w-full lg:w-1/4 flex flex-col gap-3 md:gap-4 shrink-0 hidden lg:flex">
+        <div class="dark-card p-4 md:p-5 flex flex-col justify-between shrink-0">
             <div>
                 <div class="flex items-center justify-between gap-3.5">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-2xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400 text-lg font-bold">
+                        <div class="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400 text-base md:text-lg font-bold">
                             <i class="fa-solid fa-bolt"></i>
                         </div>
                         <div>
-                            <h2 class="section-header text-base">Progres Fokus</h2>
-                            <p class="text-[11px] text-sky-400 font-semibold">Green Completion ID</p>
+                            <h2 class="section-header text-sm md:text-base">Progres Fokus</h2>
+                            <p class="text-[10px] md:text-[11px] text-sky-400 font-semibold">Responsive Edition</p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-2 mt-4">
-                    <button class="dark-btn py-2 px-3 text-xs flex items-center justify-center gap-1.5 bg-sky-500/10 text-sky-300 border-sky-400/30 hover:bg-sky-500/20" onclick="openModal('affirmation')">
-                        <i class="fa-solid fa-sparkles text-amber-300 text-sm"></i> Afirmasi
+                <div class="grid grid-cols-2 gap-2 mt-3 md:mt-4">
+                    <button class="dark-btn py-1.5 md:py-2 px-2.5 md:px-3 text-xs flex items-center justify-center gap-1.5 bg-sky-500/10 text-sky-300 border-sky-400/30 hover:bg-sky-500/20" onclick="openModal('affirmation')">
+                        <i class="fa-solid fa-sparkles text-amber-300 text-xs"></i> Afirmasi
                     </button>
-                    <button class="dark-btn py-2 px-3 text-xs flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-300 border-emerald-400/30 hover:bg-emerald-500/20" onclick="openModal('note')">
-                        <i class="fa-solid fa-book-open text-sm"></i> Catatan
+                    <button class="dark-btn py-1.5 md:py-2 px-2.5 md:px-3 text-xs flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-300 border-emerald-400/30 hover:bg-emerald-500/20" onclick="openModal('note')">
+                        <i class="fa-solid fa-book-open text-xs"></i> Catatan
                     </button>
                 </div>
             </div>
 
-            <div class="mt-4 pt-3.5 border-t border-slate-700/60 flex items-center justify-between">
-                <span class="text-slate-400 text-sm font-semibold">Streak Aktif</span>
-                <div class="bg-amber-500/15 border border-amber-400/30 px-3 py-1.5 rounded-xl flex items-center gap-2">
-                    <i class="fa-solid fa-fire text-amber-400 text-lg"></i> 
-                    <span class="text-amber-300 font-extrabold text-base" id="streak-counter">0 Hari</span>
+            <div class="mt-3 md:mt-4 pt-3 border-t border-slate-700/60 flex items-center justify-between">
+                <span class="text-slate-400 text-xs md:text-sm font-semibold">Streak Aktif</span>
+                <div class="bg-amber-500/15 border border-amber-400/30 px-2.5 py-1 rounded-xl flex items-center gap-1.5">
+                    <i class="fa-solid fa-fire text-amber-400 text-sm md:text-base"></i> 
+                    <span class="text-amber-300 font-extrabold text-sm md:text-base" id="streak-counter">0 Hari</span>
                 </div>
             </div>
         </div>
 
-        <div class="dark-card p-6 flex flex-col justify-center shrink-0">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-bold uppercase tracking-wider text-slate-300">Pomodoro Timer</span>
-                <i class="fa-solid fa-stopwatch text-sky-400 text-lg"></i>
+        <div class="dark-card p-4 md:p-6 flex flex-col justify-center shrink-0">
+            <div class="flex items-center justify-between mb-2 md:mb-3">
+                <span class="text-xs md:text-sm font-bold uppercase tracking-wider text-slate-300">Pomodoro Timer</span>
+                <i class="fa-solid fa-stopwatch text-sky-400 text-base md:text-lg"></i>
             </div>
-            <div class="text-6xl font-black text-slate-100 tracking-tight my-2" id="timer-display">25:00</div>
-            <div class="flex gap-3 mt-4">
-                <button class="dark-btn flex-1 py-3 text-base flex items-center justify-center gap-2" onclick="toggleTimer()">
-                    <i class="fa-solid fa-play text-sm" id="play-icon"></i> <span id="play-label">Mulai</span>
+            <div class="text-4xl md:text-5xl font-black text-slate-100 tracking-tight my-1 text-center" id="timer-display">25:00</div>
+            <div class="flex gap-2.5 mt-3">
+                <button class="dark-btn flex-1 py-2.5 text-xs md:text-sm flex items-center justify-center gap-2" onclick="toggleTimer()">
+                    <i class="fa-solid fa-play text-xs" id="play-icon"></i> <span id="play-label">Mulai</span>
                 </button>
-                <button class="dark-btn px-4 py-3 text-base" onclick="resetTimer()">
+                <button class="dark-btn px-3.5 py-2.5 text-xs md:text-sm" onclick="resetTimer()">
                     <i class="fa-solid fa-rotate-right"></i>
                 </button>
             </div>
         </div>
 
-        <div class="dark-card p-5 flex flex-col justify-between flex-grow">
-            <div class="space-y-4">
-                <div class="flex flex-col items-center justify-center bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 relative">
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" id="daily-sidebar-date">Progres Harian - Hari Ini</span>
-                    <div class="relative flex items-center justify-center w-[130px] h-[130px]">
+        <div class="dark-card p-4 md:p-5 flex flex-col justify-between lg:flex-grow">
+            <div class="space-y-3 md:space-y-4">
+                <div class="flex flex-col items-center justify-center bg-slate-900/60 p-3 md:p-4 rounded-xl border border-slate-700/60 relative">
+                    <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" id="daily-sidebar-date">Progres Harian - Hari Ini</span>
+                    <div class="relative flex items-center justify-center w-[110px] h-[110px] md:w-[130px] md:h-[130px]">
                         <svg class="giant-ring-svg w-full h-full">
-                            <circle cx="70" cy="70" r="50" class="giant-ring-bg"></circle>
-                            <circle id="sidebar-giant-ring" cx="70" cy="70" r="50" class="giant-ring-segment stroke-sky-400" stroke-width="15" stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+                            <circle cx="50" cy="50" r="40" class="giant-ring-bg" stroke-width="12"></circle>
+                            <circle id="sidebar-giant-ring" cx="50" cy="50" r="40" class="giant-ring-segment stroke-sky-400" stroke-width="12" stroke-dasharray="251.33" stroke-dashoffset="251.33"></circle>
                         </svg>
                         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                            <span class="text-xl font-black text-white tracking-tight leading-none" id="daily-sidebar-text">0%</span>
-                            <span class="text-[9px] text-slate-400 uppercase font-bold mt-0.5">Selesai</span>
+                            <span class="text-lg md:text-xl font-black text-white tracking-tight leading-none" id="daily-sidebar-text">0%</span>
+                            <span class="text-[8px] md:text-[9px] text-slate-400 uppercase font-bold mt-0.5">Selesai</span>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-sm font-bold uppercase tracking-wider text-sky-400">Grafik Bulanan</span>
-                        <span class="text-base font-extrabold text-sky-400" id="monthly-text">0%</span>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs md:text-sm font-bold uppercase tracking-wider text-sky-400">Grafik Bulanan</span>
+                        <span class="text-sm md:text-base font-extrabold text-sky-400" id="monthly-text">0%</span>
                     </div>
                     <div class="monthly-chart-container" id="monthly-chart-bars"></div>
                 </div>
                 
-                <div class="space-y-2 pt-2 border-t border-slate-700/60 text-sm">
+                <div class="space-y-1.5 pt-2 border-t border-slate-700/60 text-xs md:text-sm">
                     <div class="flex justify-between text-slate-300">
                         <span class="text-slate-400">Total Tugas Bulan Ini</span>
                         <span class="font-semibold" id="stats-total">0</span>
@@ -349,7 +360,7 @@
                 </div>
             </div>
 
-            <div class="pt-3 border-t border-slate-700/60 flex gap-2">
+            <div class="pt-3 mt-3 border-t border-slate-700/60 flex gap-2">
                 <button class="dark-btn flex-1 py-2 text-xs flex items-center justify-center gap-1.5" onclick="document.getElementById('file-upload').click()">
                     <i class="fa-solid fa-file-arrow-down"></i> Import
                 </button>
@@ -361,84 +372,88 @@
         </div>
     </aside>
 
-    <!-- CENTER COLUMN -->
-    <main class="w-2/4 dark-card p-6 h-full flex flex-col">
-        <div class="flex justify-between items-center mb-6 px-1 shrink-0">
-            <button class="dark-btn w-11 h-11 flex items-center justify-center text-lg" onclick="changeMonth(-1)">
+    <!-- CENTER COLUMN: Main Full-Height Calendar Grid -->
+    <main id="panel-calendar" class="w-full lg:w-2/4 dark-card p-4 md:p-6 lg:h-full flex flex-col flex-grow">
+        <div class="flex justify-between items-center mb-4 md:mb-6 px-1 shrink-0">
+            <button class="dark-btn w-9 h-9 md:w-11 md:h-11 flex items-center justify-center text-base md:text-lg" onclick="changeMonth(-1)">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
             <h2 class="month-header-giant text-center" id="month-year-display">Bulan Tahun</h2>
-            <button class="dark-btn w-11 h-11 flex items-center justify-center text-lg" onclick="changeMonth(1)">
+            <button class="dark-btn w-9 h-9 md:w-11 md:h-11 flex items-center justify-center text-base md:text-lg" onclick="changeMonth(1)">
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
         </div>
 
-        <div class="grid grid-cols-7 gap-2.5 mb-2 text-center text-sm font-extrabold uppercase tracking-wider text-slate-300 shrink-0">
-            <span class="text-rose-400">Minggu</span>
-            <span>Senin</span>
-            <span>Selasa</span>
-            <span>Rabu</span>
-            <span>Kamis</span>
-            <span>Jumat</span>
-            <span class="text-rose-400">Sabtu</span>
+        <div class="grid grid-cols-7 gap-1.5 md:gap-2.5 mb-2 text-center text-xs md:text-sm font-extrabold uppercase tracking-wider text-slate-300 shrink-0">
+            <span class="text-rose-400">Mg</span>
+            <span>Sn</span>
+            <span>Sl</span>
+            <span>Rb</span>
+            <span>Km</span>
+            <span>Jm</span>
+            <span class="text-rose-400">Sb</span>
         </div>
 
-        <div id="calendar-grid" class="grid grid-cols-7 grid-rows-5 gap-2.5 flex-grow w-full"></div>
+        <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 md:gap-2.5 flex-grow w-auto auto-rows-fr">
+            <!-- Calendar days injected via JS -->
+        </div>
     </main>
 
-    <!-- RIGHT COLUMN -->
-    <aside class="w-1/4 flex flex-col gap-4 h-full">
-        <div class="dark-card p-4 flex-1 flex flex-col overflow-hidden">
-            <div class="flex items-center justify-between pb-2.5 mb-2 border-b border-slate-700/60">
+    <!-- RIGHT COLUMN: Dual Task Stack -->
+    <aside id="panel-tasks" class="w-full lg:w-1/4 flex flex-col gap-3 md:gap-4 shrink-0 hidden lg:flex h-[600px] lg:h-full">
+        <!-- TOP: Rutinitas -->
+        <div class="dark-card p-3.5 md:p-4 flex-1 flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-700/60 shrink-0">
                 <div class="flex items-center gap-2">
-                    <div class="w-2.5 h-2.5 rounded-full bg-sky-400"></div>
-                    <h3 class="section-header">Rutinitas Harian</h3>
+                    <div class="w-2 h-2 rounded-full bg-sky-400"></div>
+                    <h3 class="section-header text-sm md:text-base">Rutinitas Harian</h3>
                 </div>
-                <span class="text-xs text-sky-400 font-semibold">Otomatis</span>
+                <span class="text-[10px] md:text-xs text-sky-400 font-semibold">Otomatis</span>
             </div>
 
-            <div class="flex-1 overflow-y-auto pr-1 space-y-2.5 custom-scroll" id="routine-list"></div>
+            <div class="flex-1 overflow-y-auto pr-1 space-y-2 custom-scroll" id="routine-list"></div>
 
-            <div class="pt-2.5 mt-2 border-t border-slate-700/60 flex flex-col gap-2">
+            <div class="pt-2 mt-2 border-t border-slate-700/60 flex flex-col gap-1.5 shrink-0">
                 <div class="flex gap-1.5">
-                    <select id="routine-priority" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-slate-300">
+                    <select id="routine-priority" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[11px] font-bold text-slate-300">
                         <option value="high">🔴 Tinggi</option>
                         <option value="medium" selected>🟡 Sedang</option>
                         <option value="low">🔵 Rendah</option>
                     </select>
-                    <input type="text" id="routine-deadline" placeholder="Deadline" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-200 w-24">
+                    <input type="text" id="routine-deadline" placeholder="Deadline" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[11px] text-slate-200 flex-1">
                 </div>
-                <div class="flex gap-2">
-                    <input type="text" id="routine-add-input" placeholder="Tambah rutinitas..." class="flex-grow bg-slate-900/60 border border-slate-700 rounded-xl px-3 py-1.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-sky-400" onkeypress="handleKeyPress(event, 'routine')">
-                    <button class="dark-btn px-3 py-1.5 text-sm bg-sky-500/20 text-sky-400 hover:bg-sky-500/30" onclick="addRoutine()">
+                <div class="flex gap-1.5">
+                    <input type="text" id="routine-add-input" placeholder="Tambah rutinitas..." class="flex-grow bg-slate-900/60 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs md:text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-sky-400" onkeypress="handleKeyPress(event, 'routine')">
+                    <button class="dark-btn px-3 py-1.5 text-xs bg-sky-500/20 text-sky-400 hover:bg-sky-500/30" onclick="addRoutine()">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="dark-card p-4 flex-1 flex flex-col overflow-hidden">
-            <div class="flex items-center justify-between pb-2.5 mb-2 border-b border-slate-700/60">
+        <!-- BOTTOM: Harian Spesifik Tanggal -->
+        <div class="dark-card p-3.5 md:p-4 flex-1 flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-700/60 shrink-0">
                 <div class="flex items-center gap-2">
-                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
-                    <h3 class="section-header truncate" id="daily-title-header">Harian Spesifik</h3>
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <h3 class="section-header text-sm md:text-base truncate" id="daily-title-header">Harian Spesifik</h3>
                 </div>
             </div>
 
-            <div class="flex-1 overflow-y-auto pr-1 space-y-2.5 custom-scroll" id="daily-list"></div>
+            <div class="flex-1 overflow-y-auto pr-1 space-y-2 custom-scroll" id="daily-list"></div>
 
-            <div class="pt-2.5 mt-2 border-t border-slate-700/60 flex flex-col gap-2">
+            <div class="pt-2 mt-2 border-t border-slate-700/60 flex flex-col gap-1.5 shrink-0">
                 <div class="flex gap-1.5">
-                    <select id="daily-priority" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-slate-300">
+                    <select id="daily-priority" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[11px] font-bold text-slate-300">
                         <option value="high">🔴 Tinggi</option>
                         <option value="medium" selected>🟡 Sedang</option>
                         <option value="low">🔵 Rendah</option>
                     </select>
-                    <input type="text" id="daily-deadline" placeholder="Deadline" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-200 w-24">
+                    <input type="text" id="daily-deadline" placeholder="Deadline" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[11px] text-slate-200 flex-1">
                 </div>
-                <div class="flex gap-2">
-                    <input type="text" id="daily-add-input" placeholder="Tambah harian..." class="flex-grow bg-slate-900/60 border border-slate-700 rounded-xl px-3 py-1.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-emerald-400" onkeypress="handleKeyPress(event, 'daily')">
-                    <button class="dark-btn px-3 py-1.5 text-sm bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30" onclick="addDaily()">
+                <div class="flex gap-1.5">
+                    <input type="text" id="daily-add-input" placeholder="Tambah harian..." class="flex-grow bg-slate-900/60 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs md:text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-emerald-400" onkeypress="handleKeyPress(event, 'daily')">
+                    <button class="dark-btn px-3 py-1.5 text-xs bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30" onclick="addDaily()">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -450,40 +465,40 @@
     <div id="app-modal" class="modal-overlay" onclick="closeModalOnBg(event)">
         <div class="modal-box-full">
             <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-700/60 shrink-0">
-                <h3 id="modal-title" class="font-extrabold text-2xl neon-glow-text flex items-center gap-3">
+                <h3 id="modal-title" class="font-extrabold text-lg md:text-2xl neon-glow-text flex items-center gap-2.5 truncate">
                     <i class="fa-solid fa-sparkles"></i> Afirmasi Hari Ini
                 </h3>
-                <div class="flex items-center gap-2">
-                    <label id="upload-label-btn" class="dark-btn px-2.5 py-1.5 text-xs bg-sky-500/15 text-sky-300 border-sky-400/30 cursor-pointer flex items-center gap-1.5 hover:bg-sky-500/30">
-                        <i class="fa-image"></i> Pilih Gambar
+                <div class="flex items-center gap-1.5 md:gap-2">
+                    <label id="upload-label-btn" class="dark-btn px-2.5 py-1.5 text-xs bg-sky-500/15 text-sky-300 border-sky-400/30 cursor-pointer flex items-center gap-1 hover:bg-sky-500/30">
+                        <i class="fa-image"></i> <span class="hidden sm:inline">Pilih</span> Gambar
                         <input type="file" id="affirmation-image-upload" accept="image/*,.png,.jpg,.jpeg,.webp,.gif,.svg,.bmp,.ico" class="hidden" onchange="handleAffirmationImageUpload(event)">
                     </label>
-                    <button id="shuffle-affirmation-btn" class="dark-btn px-2.5 py-1.5 text-xs bg-sky-500/20 text-sky-300 border-sky-400/30 flex items-center gap-1.5" onclick="randomAffirmation(true)">
-                        <i class="fa-solid fa-shuffle"></i> Acak Mantra
+                    <button id="shuffle-affirmation-btn" class="dark-btn px-2.5 py-1.5 text-xs bg-sky-500/20 text-sky-300 border-sky-400/30 flex items-center gap-1" onclick="randomAffirmation(true)">
+                        <i class="fa-solid fa-shuffle"></i> <span class="hidden sm:inline">Acak</span>
                     </button>
                     <button id="delete-img-btn" class="dark-btn px-2.5 py-1.5 text-xs bg-rose-500/20 text-rose-300 border-rose-400/30 hidden" onclick="deleteAffirmationImage()" title="Hapus Gambar">
                         <i class="fa-solid fa-trash"></i>
                     </button>
-                    <button class="dark-btn px-3 py-1.5 text-xs flex items-center gap-1.5" onclick="closeModal()">
-                        <i class="fa-solid fa-xmark text-sm"></i> Tutup
+                    <button class="dark-btn px-2.5 py-1.5 text-xs flex items-center gap-1" onclick="closeModal()">
+                        <i class="fa-solid fa-xmark text-sm"></i>
                     </button>
                 </div>
             </div>
             
-            <div id="content-affirmation" class="flex-1 flex flex-col items-center justify-center gap-4 overflow-hidden relative">
-                <div class="w-full shrink-0 text-center px-4 py-2 bg-slate-900/40 rounded-xl border border-slate-700/40">
-                    <p id="affirmation-quote" class="text-2xl md:text-3xl font-black neon-glow-yellow italic max-w-5xl mx-auto leading-relaxed">"Konsistensi kecil mengalahkan ledakan usaha sesaat."</p>
-                    <span class="text-[10px] tracking-widest text-slate-400 uppercase font-bold mt-1 block">Mantra Harian Acak (100+ Koleksi)</span>
+            <div id="content-affirmation" class="flex-1 flex flex-col items-center justify-center gap-3 overflow-hidden relative">
+                <div class="w-full shrink-0 text-center px-3 py-1.5 bg-slate-900/40 rounded-xl border border-slate-700/40">
+                    <p id="affirmation-quote" class="text-lg md:text-2xl font-black neon-glow-yellow italic max-w-5xl mx-auto leading-relaxed">"Konsistensi kecil mengalahkan ledakan usaha sesaat."</p>
+                    <span class="text-[9px] tracking-widest text-slate-400 uppercase font-bold block">Mantra Harian Acak (100+ Koleksi)</span>
                 </div>
-                <div class="w-full flex-1 flex flex-col items-center justify-center bg-slate-900/60 border border-slate-700/50 rounded-2xl p-4 text-center relative overflow-hidden">
-                    <img id="affirmation-image-preview" src="" alt="Afirmasi User" style="display: none;" class="w-full h-full object-contain rounded-xl max-h-[64vh]">
+                <div class="w-full flex-1 flex flex-col items-center justify-center bg-slate-900/60 border border-slate-700/50 rounded-2xl p-3 text-center relative overflow-hidden">
+                    <img id="affirmation-image-preview" src="" alt="Afirmasi User" style="display: none;" class="w-full h-full object-contain rounded-xl max-h-[58vh] md:max-h-[64vh]">
                 </div>
             </div>
 
             <div id="content-note" class="flex-1 flex flex-col gap-4 hidden overflow-hidden">
-                <textarea id="user-note-area" class="w-full flex-1 bg-slate-900/90 border border-slate-700 rounded-2xl p-6 text-xl neon-glow-yellow outline-none focus:border-amber-400 resize-none leading-relaxed custom-scroll font-bold" placeholder="Tulis catatan, refleksi, atau ide besar hari ini... (Tulisan menyala kuning)"></textarea>
+                <textarea id="user-note-area" class="w-full flex-1 bg-slate-900/90 border border-slate-700 rounded-2xl p-4 md:p-6 text-base md:text-xl neon-glow-yellow outline-none focus:border-amber-400 resize-none leading-relaxed custom-scroll font-bold" placeholder="Tulis catatan, refleksi, atau ide besar hari ini... (Tulisan menyala kuning)"></textarea>
                 <div class="flex justify-end gap-3 shrink-0">
-                    <button class="dark-btn px-6 py-2.5 text-sm bg-amber-500/20 text-amber-300 border-amber-400/30 neon-glow-yellow" onclick="saveUserNote()">
+                    <button class="dark-btn px-5 py-2.5 text-xs md:text-sm bg-amber-500/20 text-amber-300 border-amber-400/30 neon-glow-yellow" onclick="saveUserNote()">
                         <i class="fa-solid fa-check mr-2"></i> Simpan Catatan
                     </button>
                 </div>
@@ -594,7 +609,6 @@
             "Tuntas dan berkualitas, itu standar barumu."
         ];
 
-        // --- DAFTAR LIBUR NASIONAL INDONESIA 2026 (Referensi Resmi / Akurat) ---
         const indonesianHolidays = {
             "01-01": "Tahun Baru Masehi",
             "01-16": "Isra Mikraj Nabi",
@@ -614,6 +628,54 @@
             "08-25": "Maulid Nabi Muhammad SAW",
             "12-25": "Hari Raya Natal"
         };
+
+        // Mobile responsive tab switcher
+        function switchMobileTab(tab) {
+            const cal = document.getElementById('panel-calendar');
+            const tasks = document.getElementById('panel-tasks');
+            const stats = document.getElementById('panel-stats');
+            const btnCal = document.getElementById('tab-btn-cal');
+            const btnTasks = document.getElementById('tab-btn-tasks');
+            const btnStats = document.getElementById('tab-btn-stats');
+
+            // Reset classes
+            [cal, tasks, stats].forEach(el => el.classList.add('hidden'));
+            [btnCal, btnTasks, btnStats].forEach(el => {
+                el.classList.remove('bg-sky-500/20', 'text-sky-300');
+                el.classList.add('text-slate-400');
+            });
+
+            if (tab === 'calendar') {
+                cal.classList.remove('hidden');
+                cal.classList.add('flex');
+                btnCal.classList.add('bg-sky-500/20', 'text-sky-300');
+                btnCal.classList.remove('text-slate-400');
+            } else if (tab === 'tasks') {
+                tasks.classList.remove('hidden');
+                tasks.classList.add('flex');
+                btnTasks.classList.add('bg-sky-500/20', 'text-sky-300');
+                btnTasks.classList.remove('text-slate-400');
+            } else if (tab === 'stats') {
+                stats.classList.remove('hidden');
+                stats.classList.add('flex');
+                btnStats.classList.add('bg-sky-500/20', 'text-sky-300');
+                btnStats.classList.remove('text-slate-400');
+            }
+        }
+
+        // Auto responsive layout view on resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                document.getElementById('panel-calendar').classList.remove('hidden');
+                document.getElementById('panel-calendar').classList.add('flex');
+                document.getElementById('panel-tasks').classList.remove('hidden');
+                document.getElementById('panel-tasks').classList.add('flex');
+                document.getElementById('panel-stats').classList.remove('hidden');
+                document.getElementById('panel-stats').classList.add('flex');
+            } else {
+                switchMobileTab('calendar');
+            }
+        });
 
         function loadAffirmationImage() {
             const savedImg = localStorage.getItem('userAffirmationImg');
@@ -797,9 +859,9 @@
         let currentDate = new Date();
         let selectedDateStr = "";
         
-        let dailyTasks = JSON.parse(localStorage.getItem('darkNeonHolidayDaily_v4')) || {};
-        let routineTasks = JSON.parse(localStorage.getItem('darkNeonHolidayRoutineList_v4')) || [];
-        let routineStatus = JSON.parse(localStorage.getItem('darkNeonHolidayRoutineStatus_v4')) || {}; 
+        let dailyTasks = JSON.parse(localStorage.getItem('darkResponsiveDaily')) || {};
+        let routineTasks = JSON.parse(localStorage.getItem('darkResponsiveRoutineList')) || [];
+        let routineStatus = JSON.parse(localStorage.getItem('darkResponsiveRoutineStatus')) || {}; 
 
         const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         const shortMonths = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
@@ -816,6 +878,7 @@
             renderTasks(selectedDateStr);
             renderMonthlyProgress();
             renderDailySidebar(selectedDateStr);
+            if (window.innerWidth < 1024) switchMobileTab('calendar');
         }
 
         function formatDate(date) {
@@ -823,9 +886,9 @@
         }
 
         function saveData() {
-            localStorage.setItem('darkNeonHolidayDaily_v4', JSON.stringify(dailyTasks));
-            localStorage.setItem('darkNeonHolidayRoutineList_v4', JSON.stringify(routineTasks));
-            localStorage.setItem('darkNeonHolidayRoutineStatus_v4', JSON.stringify(routineStatus));
+            localStorage.setItem('darkResponsiveDaily', JSON.stringify(dailyTasks));
+            localStorage.setItem('darkResponsiveRoutineList', JSON.stringify(routineTasks));
+            localStorage.setItem('darkResponsiveRoutineStatus', JSON.stringify(routineStatus));
             calculateStreak();
             renderMonthlyProgress();
             renderDailySidebar(selectedDateStr);
@@ -863,7 +926,7 @@
             let pct = Math.round(stats.progress);
             document.getElementById('daily-sidebar-text').innerText = `${pct}%`;
             
-            const radius = 50;
+            const radius = 40;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference - (pct / 100) * circumference;
             const giantRing = document.getElementById('sidebar-giant-ring');
@@ -891,7 +954,7 @@
 
                 let pctDay = Math.round(stats.progress);
                 let barColor = pctDay === 100 ? '#10b981' : (pctDay > 0 ? '#38bdf8' : '#334155');
-                chartBarsEl.innerHTML += `<div class="monthly-chart-bar" style="height: ${Math.max(8, pctDay)}%; background-color: ${barColor};" title="Tgl ${i}: ${pctDay}%"></div>`;
+                chartBarsEl.innerHTML += `<div class="monthly-chart-bar" style="height: ${Math.max(6, pctDay)}%; background-color: ${barColor};" title="Tgl ${i}: ${pctDay}%"></div>`;
             }
 
             let monthlyPercent = totalTasksMonth > 0 ? Math.round((completedTasksMonth / totalTasksMonth) * 100) : 0;
@@ -939,10 +1002,9 @@
                 let pct = Math.round(stats.progress);
                 let isComplete100 = stats.total > 0 && stats.completed === stats.total;
 
-                // Tanda centang hijau besar jika tugas selesai 100% (baik hari lewat maupun aktif/hari ini)
                 let completeCheckOverlay = isComplete100 ? `
                     <div class="complete-check-overlay">
-                        <svg class="w-16 h-16 drop-shadow-[0_2px_8px_rgba(52,211,153,0.85)]" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="w-10 h-10 md:w-14 md:h-14 drop-shadow-[0_2px_8px_rgba(52,211,153,0.85)]" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>` : '';
@@ -956,43 +1018,33 @@
 
                 let holidayBadgeHtml = holidayName ? `<span class="holiday-badge" title="${holidayName}">${holidayName}</span>` : '';
 
-                // BEDA BENTUK & DIPISAH 2 BARIS (hanya muncul jika belum 100% selesai)
                 let bottomContent = '';
-                let rList = (stats.uncompletedRoutines || []).slice(0, 3);
-                let dList = (stats.uncompletedDailies || []).slice(0, 3);
+                let rList = (stats.uncompletedRoutines || []).slice(0, 2);
+                let dList = (stats.uncompletedDailies || []).slice(0, 2);
                 
                 if (!isComplete100 && (rList.length > 0 || dList.length > 0)) {
-                    let rDots = rList.map(item => `<span class="w-2.5 h-2.5 rounded-full inline-block shadow-sm" style="background-color: ${getPriorityColorHex(item.priority||'medium')}" title="Rutin belum selesai"></span>`).join('');
-                    let dDots = dList.map(item => `<span class="w-2.5 h-2.5 rounded-sm inline-block shadow-sm" style="background-color: ${getPriorityColorHex(item.priority||'medium')}" title="Harian belum selesai"></span>`).join('');
+                    let rDots = rList.map(item => `<span class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full inline-block shadow-sm" style="background-color: ${getPriorityColorHex(item.priority||'medium')}" title="Rutin"></span>`).join('');
+                    let dDots = dList.map(item => `<span class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-sm inline-block shadow-sm" style="background-color: ${getPriorityColorHex(item.priority||'medium')}" title="Harian"></span>`).join('');
                     let rRow = rDots ? `<div class="flex items-center gap-1 z-20">${rDots}</div>` : '';
                     let dRow = dDots ? `<div class="flex items-center gap-1 z-20">${dDots}</div>` : '';
-                    bottomContent = `<div class="flex flex-col gap-1 mt-auto">${rRow}${dRow}</div>`;
+                    bottomContent = `<div class="flex flex-col gap-0.5 mt-auto">${rRow}${dRow}</div>`;
                 } else if (stats.total > 0 && !isComplete100) {
-                    bottomContent = `<div class="text-xs text-slate-200 font-extrabold z-10 w-full mt-auto bg-slate-900/45 px-2 py-1 rounded-md border border-slate-700/50">${stats.completed}/${stats.total} Selesai</div>`;
-                } else {
-                    bottomContent = '';
+                    bottomContent = `<div class="text-[10px] md:text-xs text-slate-200 font-extrabold z-10 w-full mt-auto bg-slate-900/45 px-1.5 py-0.5 rounded border border-slate-700/50">${stats.completed}/${stats.total}</div>`;
                 }
 
-                let r = 15;
-                let circ = 2 * Math.PI * r;
-                let dashOffset = circ - (pct / 100) * circ;
                 let ringColorClass = isComplete100 ? 'stroke-emerald-400' : 'stroke-sky-400';
 
                 grid.innerHTML += `
                     <div class="dark-day relative overflow-hidden ${borderStateClass} ${greenCompleteClass} ${todayActiveClass} ${selectStyle} ${weekendClass}" 
                          onclick="selectDate('${dateStr}')">
                         <div class="flex justify-between items-start z-10 w-full">
-                            <div class="flex flex-col">
-                                <span class="active-date-num ${todayNumClass} font-black text-3xl leading-none">${i}</span>
+                            <div class="flex flex-col min-w-0">
+                                <span class="active-date-num ${todayNumClass} font-black leading-none">${i}</span>
                                 ${holidayBadgeHtml}
                             </div>
                             ${stats.total > 0 ? `
-                                <div class="relative flex items-center justify-center">
-                                    <svg class="w-9 h-9 transform -rotate-90">
-                                        <circle cx="18" cy="18" r="15" class="ring-bg" stroke-width="3"></circle>
-                                        <circle cx="18" cy="18" r="15" class="ring-prog ${ringColorClass}" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="${dashOffset}"></circle>
-                                    </svg>
-                                    <span class="absolute text-[9px] font-bold text-slate-200">${isComplete100 ? '✓' : pct + '%'}</span>
+                                <div class="relative flex items-center justify-center shrink-0 w-6 h-6 md:w-8 md:h-8">
+                                    <span class="text-[8px] md:text-[9px] font-bold text-slate-200">${isComplete100 ? '✓' : pct + '%'}</span>
                                 </div>
                             ` : ''}
                         </div>
@@ -1012,6 +1064,9 @@
             renderCalendar();
             renderTasks(dateStr);
             renderDailySidebar(dateStr);
+            if (window.innerWidth < 1024) {
+                switchMobileTab('tasks');
+            }
         }
 
         function renderTasks(dateStr) {
@@ -1020,7 +1075,7 @@
 
             const rList = document.getElementById('routine-list');
             if (routineTasks.length === 0) {
-                rList.innerHTML = `<div class="py-6 text-center text-xs text-slate-500">Belum ada rutinitas</div>`;
+                rList.innerHTML = `<div class="py-4 text-center text-xs text-slate-500">Belum ada rutinitas</div>`;
             } else {
                 let completedArr = routineStatus[dateStr] || [];
                 rList.innerHTML = routineTasks.map(t => {
@@ -1028,13 +1083,13 @@
                     let formattedText = toCapitalEachWord(t.text);
                     let prioClass = `priority-${t.priority || 'medium'}`;
                     return `
-                    <div class="flex flex-col gap-1.5 p-3 rounded-xl bg-slate-900/60 ${prioClass}">
-                        <div class="flex items-center gap-2.5">
+                    <div class="flex flex-col gap-1 p-2.5 rounded-xl bg-slate-900/60 ${prioClass}">
+                        <div class="flex items-center gap-2">
                             <input type="checkbox" class="cb-custom" ${isDone ? 'checked' : ''} onchange="toggleRoutine('${dateStr}', ${t.id}, this.checked)">
-                            <span class="flex-grow text-sm leading-tight task-text-item ${isDone ? 'task-done' : ''}">${formattedText}</span>
+                            <span class="flex-grow text-xs md:text-sm leading-tight task-text-item ${isDone ? 'task-done' : ''}">${formattedText}</span>
                             <button class="text-slate-500 hover:text-rose-400 px-1 text-xs" onclick="deleteRoutine(${t.id})"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                        ${t.deadline ? `<div class="text-[11px] text-slate-400 pl-8"><i class="fa-regular fa-clock mr-1"></i>DL: ${toCapitalEachWord(t.deadline)}</div>` : ''}
+                        ${t.deadline ? `<div class="text-[10px] text-slate-400 pl-7"><i class="fa-regular fa-clock mr-1"></i>DL: ${toCapitalEachWord(t.deadline)}</div>` : ''}
                     </div>`;
                 }).join('');
             }
@@ -1042,19 +1097,19 @@
             const dList = document.getElementById('daily-list');
             const dTasks = dailyTasks[dateStr] || [];
             if (dTasks.length === 0) {
-                dList.innerHTML = `<div class="py-6 text-center text-xs text-slate-500">Kosong untuk tanggal ini</div>`;
+                dList.innerHTML = `<div class="py-4 text-center text-xs text-slate-500">Kosong untuk tanggal ini</div>`;
             } else {
                 dList.innerHTML = dTasks.map((t, index) => {
                     let formattedText = toCapitalEachWord(t.text);
                     let prioClass = `priority-${t.priority || 'medium'}`;
                     return `
-                    <div class="flex flex-col gap-1.5 p-3 rounded-xl bg-slate-900/60 ${prioClass}">
-                        <div class="flex items-center gap-2.5">
+                    <div class="flex flex-col gap-1 p-2.5 rounded-xl bg-slate-900/60 ${prioClass}">
+                        <div class="flex items-center gap-2">
                             <input type="checkbox" class="cb-custom" ${t.done ? 'checked' : ''} onchange="toggleDaily('${dateStr}', ${index}, this.checked)">
-                            <span class="flex-grow text-sm leading-tight task-text-item ${t.done ? 'task-done' : ''}">${formattedText}</span>
+                            <span class="flex-grow text-xs md:text-sm leading-tight task-text-item ${t.done ? 'task-done' : ''}">${formattedText}</span>
                             <button class="text-slate-500 hover:text-rose-400 px-1 text-xs" onclick="deleteDaily('${dateStr}', ${index})"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                        ${t.deadline ? `<div class="text-[11px] text-slate-400 pl-8"><i class="fa-regular fa-clock mr-1"></i>DL: ${toCapitalEachWord(t.deadline)}</div>` : ''}
+                        ${t.deadline ? `<div class="text-[10px] text-slate-400 pl-7"><i class="fa-regular fa-clock mr-1"></i>DL: ${toCapitalEachWord(t.deadline)}</div>` : ''}
                     </div>`;
                 }).join('');
             }
@@ -1067,7 +1122,7 @@
             void body.offsetWidth; 
             body.classList.add('party-flash');
 
-            var count = 200;
+            var count = 150;
             var defaults = {
                 origin: { y: 0.6 },
                 colors: ['#38bdf8', '#34d399', '#f59e0b', '#ef4444', '#818cf8', '#10b981', '#ec4899', '#fde047']
@@ -1082,12 +1137,10 @@
             fire(0.25, { spread: 26, startVelocity: 55 });
             fire(0.2, { spread: 60 });
             fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-            fire(0.1, { spread: 120, startVelocity: 45 });
             
             setTimeout(() => {
-                confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: defaults.colors });
-                confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: defaults.colors });
+                confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: defaults.colors });
+                confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: defaults.colors });
             }, 300);
         }
 
@@ -1183,7 +1236,7 @@
             for(let date in routineStatus) routineStatus[date].forEach(id => { let r = routineTasks.find(x => x.id === id); if(r) exportArr.push({ Tanggal: date, Tipe: "Rutin", Tugas: r.text, Prioritas: r.priority, Deadline: r.deadline, Status: "Selesai" }); });
             if(exportArr.length === 0) return alert("Tidak ada data untuk diekspor.");
             const ws = XLSX.utils.json_to_sheet(exportArr); const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Progres"); XLSX.writeFile(wb, "Dark_Green_Complete.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Progres"); XLSX.writeFile(wb, "Dark_Responsive_Data.xlsx");
         }
         function importData(e) {
             alert("Fitur import disesuaikan dengan format sistem."); e.target.value = "";
