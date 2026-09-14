@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catatan Progres - Responsive Mobile & Desktop</title>
+    <title>Catatan Progres - Mega Cell Celebration Edition</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
 
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
         body {
@@ -106,10 +106,17 @@
             background-color: rgba(15, 23, 42, 0.75);
         }
 
+        @keyframes cellPopPulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            40% { transform: scale(1.08); filter: brightness(1.6); box-shadow: 0 0 25px rgba(52, 211, 153, 0.8); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        .cell-pop-animation { animation: cellPopPulse 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
         .dark-day.all-complete-green {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(5, 150, 105, 0.15)) !important;
-            border: 2px solid #34d399 !important;
-            box-shadow: 0 0 16px rgba(52, 211, 153, 0.35);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(5, 150, 105, 0.2)) !important;
+            border: 2.5px solid #34d399 !important;
+            box-shadow: 0 0 18px rgba(52, 211, 153, 0.45);
         }
 
         .dark-day.active-day-border {
@@ -129,6 +136,11 @@
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(244, 63, 94, 0.08)) !important; 
             border-color: rgba(239, 68, 68, 0.45) !important; 
         }
+        .dark-day.weekend.all-complete-green, .dark-day.holiday-id.all-complete-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(6, 95, 70, 0.4)) !important;
+            border: 2.5px solid #34d399 !important;
+        }
+
         .dark-day.holiday-id .active-date-num { color: #f87171 !important; }
 
         .active-date-num { color: #f8fafc; font-weight: 900; font-size: 1.25rem; }
@@ -158,11 +170,10 @@
             justify-content: center;
             pointer-events: none;
             z-index: 5;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
-        .giant-ring-svg { transform: rotate(-90deg); width: 100px; height: 100px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
-        @media (min-width: 768px) { .giant-ring-svg { width: 130px; height: 130px; } }
+        .giant-ring-svg { transform: rotate(-90deg); width: 110px; height: 110px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
         .giant-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 12; }
         .giant-ring-segment { fill: none; stroke-linecap: round; transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
@@ -236,7 +247,6 @@
         }
         .party-flash { animation: partyGlow 1s ease-in-out; }
 
-        /* Fullscreen Modal Overlay */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(10px);
             z-index: 50; display: flex; align-items: center; justify-content: center;
@@ -266,7 +276,7 @@
 </head>
 <body id="app-body" class="min-h-screen lg:h-screen w-screen flex flex-col lg:flex-row p-2.5 md:p-4 gap-3 md:gap-4 text-sm md:text-base antialiased overflow-y-auto lg:overflow-hidden">
 
-    <!-- MOBILE TAB NAVIGATION (Visible on mobile only) -->
+    <!-- MOBILE TAB NAVIGATION -->
     <div class="flex lg:hidden bg-dark-card p-1.5 rounded-xl border border-white/20 shrink-0 gap-1">
         <button id="tab-btn-cal" class="flex-1 py-2 text-xs font-bold rounded-lg bg-sky-500/20 text-sky-300 transition-all" onclick="switchMobileTab('calendar')"><i class="fa-solid fa-calendar mr-1"></i> Kalender</button>
         <button id="tab-btn-tasks" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 transition-all" onclick="switchMobileTab('tasks')"><i class="fa-solid fa-list-check mr-1"></i> Tugas</button>
@@ -284,7 +294,7 @@
                         </div>
                         <div>
                             <h2 class="section-header text-sm md:text-base">Progres Fokus</h2>
-                            <p class="text-[10px] md:text-[11px] text-sky-400 font-semibold">Responsive Edition</p>
+                            <p class="text-[10px] md:text-[11px] text-sky-400 font-semibold">Mega Celebration</p>
                         </div>
                     </div>
                 </div>
@@ -326,17 +336,20 @@
 
         <div class="dark-card p-4 md:p-5 flex flex-col justify-between lg:flex-grow">
             <div class="space-y-3 md:space-y-4">
-                <div class="flex flex-col items-center justify-center bg-slate-900/60 p-3 md:p-4 rounded-xl border border-slate-700/60 relative">
-                    <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" id="daily-sidebar-date">Progres Harian - Hari Ini</span>
-                    <div class="relative flex items-center justify-center w-[110px] h-[110px] md:w-[130px] md:h-[130px]">
-                        <svg class="giant-ring-svg w-full h-full">
-                            <circle cx="50" cy="50" r="40" class="giant-ring-bg" stroke-width="12"></circle>
-                            <circle id="sidebar-giant-ring" cx="50" cy="50" r="40" class="giant-ring-segment stroke-sky-400" stroke-width="12" stroke-dasharray="251.33" stroke-dashoffset="251.33"></circle>
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                            <span class="text-lg md:text-xl font-black text-white tracking-tight leading-none" id="daily-sidebar-text">0%</span>
-                            <span class="text-[8px] md:text-[9px] text-slate-400 uppercase font-bold mt-0.5">Selesai</span>
+                <div class="bg-slate-900/60 p-3.5 md:p-4 rounded-xl border border-slate-700/60 flex items-center justify-between gap-3">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400">Progres Harian</span>
+                        <span class="text-[11px] text-sky-300 font-medium truncate max-w-[120px]" id="daily-sidebar-date">Hari Ini</span>
+                        <div class="mt-2 flex items-baseline gap-1.5">
+                            <span class="text-2xl md:text-3xl font-black text-white tracking-tight" id="daily-sidebar-text">0%</span>
+                            <span class="text-[10px] text-emerald-400 font-bold">Selesai</span>
                         </div>
+                    </div>
+                    <div class="shrink-0 flex items-center justify-center w-[90px] h-[90px] md:w-[110px] md:h-[110px] relative">
+                        <svg class="giant-ring-svg w-full h-full">
+                            <circle cx="55" cy="55" r="42" class="giant-ring-bg" stroke-width="10"></circle>
+                            <circle id="sidebar-giant-ring" cx="55" cy="55" r="42" class="giant-ring-segment stroke-sky-400" stroke-width="10" stroke-dasharray="263.89" stroke-dashoffset="263.89"></circle>
+                        </svg>
                     </div>
                 </div>
 
@@ -625,11 +638,10 @@
             "06-01": "Hari Lahir Pancasila",
             "06-16": "Tahun Baru Islam",
             "08-17": "Proklamasi Kemerdekaan RI",
-            "08-25": "Maulid Nabi Muhammad SAW",
+            "08-25": "Maulid Nabi Muhammad SAW [cite: 1.1.2]",
             "12-25": "Hari Raya Natal"
         };
 
-        // Mobile responsive tab switcher
         function switchMobileTab(tab) {
             const cal = document.getElementById('panel-calendar');
             const tasks = document.getElementById('panel-tasks');
@@ -638,7 +650,6 @@
             const btnTasks = document.getElementById('tab-btn-tasks');
             const btnStats = document.getElementById('tab-btn-stats');
 
-            // Reset classes
             [cal, tasks, stats].forEach(el => el.classList.add('hidden'));
             [btnCal, btnTasks, btnStats].forEach(el => {
                 el.classList.remove('bg-sky-500/20', 'text-sky-300');
@@ -663,7 +674,6 @@
             }
         }
 
-        // Auto responsive layout view on resize
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 1024) {
                 document.getElementById('panel-calendar').classList.remove('hidden');
@@ -859,9 +869,9 @@
         let currentDate = new Date();
         let selectedDateStr = "";
         
-        let dailyTasks = JSON.parse(localStorage.getItem('darkResponsiveDaily')) || {};
-        let routineTasks = JSON.parse(localStorage.getItem('darkResponsiveRoutineList')) || [];
-        let routineStatus = JSON.parse(localStorage.getItem('darkResponsiveRoutineStatus')) || {}; 
+        let dailyTasks = JSON.parse(localStorage.getItem('darkSplitLayoutDaily_v2')) || {};
+        let routineTasks = JSON.parse(localStorage.getItem('darkSplitLayoutRoutineList_v2')) || [];
+        let routineStatus = JSON.parse(localStorage.getItem('darkSplitLayoutRoutineStatus_v2')) || {}; 
 
         const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         const shortMonths = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
@@ -886,9 +896,9 @@
         }
 
         function saveData() {
-            localStorage.setItem('darkResponsiveDaily', JSON.stringify(dailyTasks));
-            localStorage.setItem('darkResponsiveRoutineList', JSON.stringify(routineTasks));
-            localStorage.setItem('darkResponsiveRoutineStatus', JSON.stringify(routineStatus));
+            localStorage.setItem('darkSplitLayoutDaily_v2', JSON.stringify(dailyTasks));
+            localStorage.setItem('darkSplitLayoutRoutineList_v2', JSON.stringify(routineTasks));
+            localStorage.setItem('darkSplitLayoutRoutineStatus_v2', JSON.stringify(routineStatus));
             calculateStreak();
             renderMonthlyProgress();
             renderDailySidebar(selectedDateStr);
@@ -921,12 +931,12 @@
 
         function renderDailySidebar(dateStr) {
             const dateObj = new Date(dateStr);
-            document.getElementById('daily-sidebar-date').innerText = `Progres: ${dateObj.getDate()} ${shortMonths[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+            document.getElementById('daily-sidebar-date').innerText = `${dateObj.getDate()} ${shortMonths[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
             let stats = getStatsForDate(dateStr);
             let pct = Math.round(stats.progress);
             document.getElementById('daily-sidebar-text').innerText = `${pct}%`;
             
-            const radius = 40;
+            const radius = 42;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference - (pct / 100) * circumference;
             const giantRing = document.getElementById('sidebar-giant-ring');
@@ -967,6 +977,28 @@
             if(prio === 'high') return '#ef4444';
             if(prio === 'low') return '#3b82f6';
             return '#f59e0b';
+        }
+
+        // Mega Cell Celebration Burst inside specific cell
+        function triggerCellMegaCelebration(dateStr) {
+            const els = document.querySelectorAll(`[data-date-str="${dateStr}"]`);
+            els.forEach(el => {
+                el.classList.remove('cell-pop-animation');
+                void el.offsetWidth;
+                el.classList.add('cell-pop-animation');
+                
+                const rect = el.getBoundingClientRect();
+                const x = (rect.left + rect.width / 2) / window.innerWidth;
+                const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+                confetti({
+                    particleCount: 50,
+                    angle: 90,
+                    spread: 80,
+                    origin: { x: x, y: y },
+                    colors: ['#34d399', '#38bdf8', '#f59e0b', '#fde047', '#a78bfa']
+                });
+            });
         }
 
         function renderCalendar() {
@@ -1028,23 +1060,20 @@
                     let rRow = rDots ? `<div class="flex items-center gap-1 z-20">${rDots}</div>` : '';
                     let dRow = dDots ? `<div class="flex items-center gap-1 z-20">${dDots}</div>` : '';
                     bottomContent = `<div class="flex flex-col gap-0.5 mt-auto">${rRow}${dRow}</div>`;
-                } else if (stats.total > 0 && !isComplete100) {
-                    bottomContent = `<div class="text-[10px] md:text-xs text-slate-200 font-extrabold z-10 w-full mt-auto bg-slate-900/45 px-1.5 py-0.5 rounded border border-slate-700/50">${stats.completed}/${stats.total}</div>`;
                 }
-
-                let ringColorClass = isComplete100 ? 'stroke-emerald-400' : 'stroke-sky-400';
 
                 grid.innerHTML += `
                     <div class="dark-day relative overflow-hidden ${borderStateClass} ${greenCompleteClass} ${todayActiveClass} ${selectStyle} ${weekendClass}" 
+                         data-date-str="${dateStr}"
                          onclick="selectDate('${dateStr}')">
                         <div class="flex justify-between items-start z-10 w-full">
                             <div class="flex flex-col min-w-0">
                                 <span class="active-date-num ${todayNumClass} font-black leading-none">${i}</span>
                                 ${holidayBadgeHtml}
                             </div>
-                            ${stats.total > 0 ? `
-                                <div class="relative flex items-center justify-center shrink-0 w-6 h-6 md:w-8 md:h-8">
-                                    <span class="text-[8px] md:text-[9px] font-bold text-slate-200">${isComplete100 ? '✓' : pct + '%'}</span>
+                            ${stats.total > 0 && !isComplete100 ? `
+                                <div class="relative flex items-center justify-center shrink-0">
+                                    <span class="text-[9px] font-bold text-slate-200">${pct}%</span>
                                 </div>
                             ` : ''}
                         </div>
@@ -1115,16 +1144,20 @@
             }
         }
 
-        function triggerPartyConfetti() {
+        function triggerMegaParty(dateStr) {
             AudioFx.complete();
             const body = document.getElementById('app-body');
             body.classList.remove('party-flash');
             void body.offsetWidth; 
             body.classList.add('party-flash');
 
-            var count = 150;
+            // Cell pop & micro-burst
+            triggerCellMegaCelebration(dateStr);
+
+            // Global massive celebration
+            var count = 220;
             var defaults = {
-                origin: { y: 0.6 },
+                origin: { y: 0.5 },
                 colors: ['#38bdf8', '#34d399', '#f59e0b', '#ef4444', '#818cf8', '#10b981', '#ec4899', '#fde047']
             };
 
@@ -1134,26 +1167,46 @@
                 }));
             }
 
-            fire(0.25, { spread: 26, startVelocity: 55 });
-            fire(0.2, { spread: 60 });
-            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.3, { spread: 50, startVelocity: 60 });
+            fire(0.2, { spread: 90 });
+            fire(0.35, { spread: 130, decay: 0.9, scalar: 0.9 });
+            fire(0.15, { spread: 150, startVelocity: 35 });
             
             setTimeout(() => {
-                confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: defaults.colors });
-                confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: defaults.colors });
-            }, 300);
+                confetti({ particleCount: 100, angle: 60, spread: 70, origin: { x: 0, y: 0.8 }, colors: defaults.colors });
+                confetti({ particleCount: 100, angle: 120, spread: 70, origin: { x: 1, y: 0.8 }, colors: defaults.colors });
+            }, 250);
+        }
+
+        function checkAndTriggerDayCompletion(dateStr) {
+            const stats = getStatsForDate(dateStr);
+            if (stats.total > 0 && stats.completed === stats.total) {
+                triggerMegaParty(dateStr);
+            } else {
+                AudioFx.complete();
+            }
         }
 
         function toggleRoutine(dateStr, id, isDone) {
             if(!routineStatus[dateStr]) routineStatus[dateStr] = [];
-            if (isDone) { routineStatus[dateStr].push(id); triggerPartyConfetti(); } 
-            else { routineStatus[dateStr] = routineStatus[dateStr].filter(tid => tid !== id); }
+            if (isDone) { 
+                routineStatus[dateStr].push(id); 
+                checkAndTriggerDayCompletion(dateStr);
+            } 
+            else { 
+                routineStatus[dateStr] = routineStatus[dateStr].filter(tid => tid !== id); 
+                AudioFx.click();
+            }
             saveData(); renderCalendar(); renderTasks(dateStr); renderDailySidebar(dateStr);
         }
 
         function toggleDaily(dateStr, index, isDone) {
             dailyTasks[dateStr][index].done = isDone;
-            if (isDone) triggerPartyConfetti();
+            if (isDone) {
+                checkAndTriggerDayCompletion(dateStr);
+            } else {
+                AudioFx.click();
+            }
             saveData(); renderCalendar(); renderTasks(dateStr); renderDailySidebar(dateStr);
         }
 
@@ -1215,7 +1268,7 @@
                 timerInterval = setInterval(() => {
                     if (timeRemaining > 0) { timeRemaining--; updateTimerDisplay(); }
                     else {
-                        clearInterval(timerInterval); triggerPartyConfetti();
+                        clearInterval(timerInterval); triggerMegaParty(formatDate(new Date()));
                         alert("Sesi fokus selesai!"); resetTimer();
                     }
                 }, 1000);
@@ -1236,7 +1289,7 @@
             for(let date in routineStatus) routineStatus[date].forEach(id => { let r = routineTasks.find(x => x.id === id); if(r) exportArr.push({ Tanggal: date, Tipe: "Rutin", Tugas: r.text, Prioritas: r.priority, Deadline: r.deadline, Status: "Selesai" }); });
             if(exportArr.length === 0) return alert("Tidak ada data untuk diekspor.");
             const ws = XLSX.utils.json_to_sheet(exportArr); const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Progres"); XLSX.writeFile(wb, "Dark_Responsive_Data.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Progres"); XLSX.writeFile(wb, "Dark_Mega_Celebration.xlsx");
         }
         function importData(e) {
             alert("Fitur import disesuaikan dengan format sistem."); e.target.value = "";
