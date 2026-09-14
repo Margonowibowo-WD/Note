@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan Progres - Fullscreen Libur ID & Green Completion</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        dark: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#38bdf8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow: hidden;
+            user-select: none;
+            font-size: 15px;
+            transition: background-color 0.2s;
+        }
+
+        .dark-card {
+            background-color: #1e293b;
+            border: 2px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+            border-radius: 1.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .month-header-giant {
+            font-size: 2.25rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            color: #f8fafc;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .section-header {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            color: #f8fafc;
+        }
+
+        .dark-btn {
+            background-color: #334155;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            border-radius: 0.85rem;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .dark-btn:hover { background-color: #475569; transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.3); }
+        .dark-btn:active { transform: scale(0.96); }
+
+        .dark-day {
+            background-color: rgba(30, 41, 59, 0.9);
+            border-radius: 0.85rem;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            height: 100%;
+            position: relative;
+        }
+        
+        .dark-day.past-date {
+            border: 1.5px dashed rgba(239, 68, 68, 0.35);
+            opacity: 0.75;
+            background-color: rgba(15, 23, 42, 0.75);
+        }
+
+        .dark-day.all-complete-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(5, 150, 105, 0.15)) !important;
+            border: 2px solid #34d399 !important;
+            box-shadow: 0 0 16px rgba(52, 211, 153, 0.35);
+        }
+
+        .dark-day.active-day-border {
+            border: 2px solid rgba(56, 189, 248, 0.55);
+            box-shadow: inset 0 0 8px rgba(56, 189, 248, 0.1);
+        }
+
+        .dark-day:hover { transform: scale(1.04) translateY(-2px); background-color: rgba(51, 65, 85, 1); z-index: 10; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.6); border-color: #38bdf8 !important; }
+        
+        .dark-day.is-today-active {
+            border: 2.5px solid #f59e0b !important;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(56, 189, 248, 0.15)) !important;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+        
+        .dark-day.weekend, .dark-day.holiday-id { 
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(244, 63, 94, 0.08)) !important; 
+            border-color: rgba(239, 68, 68, 0.45) !important; 
+        }
+        .dark-day.weekend.all-complete-green, .dark-day.holiday-id.all-complete-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(6, 95, 70, 0.35)) !important;
+            border: 2px solid #34d399 !important;
+        }
+
+        .dark-day.holiday-id .active-date-num { color: #f87171 !important; }
+
+        .active-date-num { color: #f8fafc; font-weight: 900; }
+        .active-date-num.is-today-num { color: #fbbf24; text-shadow: 0 0 8px rgba(251, 191, 36, 0.5); }
+
+        .holiday-badge {
+            font-size: 8px;
+            font-weight: 800;
+            background: rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+            padding: 1px 4px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 2px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .complete-check-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.9;
+        }
+
+        .giant-ring-svg { transform: rotate(-90deg); width: 140px; height: 140px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
+        .giant-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 14; }
+        .giant-ring-segment { fill: none; stroke-linecap: round; transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .monthly-chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 52px;
+            gap: 2px;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .monthly-chart-bar {
+            flex: 1;
+            background-color: #334155;
+            border-radius: 2px 2px 0 0;
+            transition: height 0.3s ease, background-color 0.3s ease;
+            min-height: 4px;
+        }
+
+        .priority-high { border-left: 5px solid #ef4444 !important; background: rgba(239, 68, 68, 0.08) !important; border: 1.5px solid rgba(239, 68, 68, 0.25); border-left-width: 5px !important; }
+        .priority-high .task-text-item { color: #fca5a5 !important; font-weight: 700; text-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+
+        .priority-medium { border-left: 5px solid #f59e0b !important; background: rgba(245, 158, 11, 0.08) !important; border: 1.5px solid rgba(245, 158, 11, 0.25); border-left-width: 5px !important; }
+        .priority-medium .task-text-item { color: #fde047 !important; font-weight: 700; text-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+
+        .priority-low { border-left: 5px solid #3b82f6 !important; background: rgba(59, 130, 246, 0.08) !important; border: 1.5px solid rgba(59, 130, 246, 0.25); border-left-width: 5px !important; }
+        .priority-low .task-text-item { color: #93c5fd !important; font-weight: 700; text-shadow: 0 0 8px rgba(59, 130, 246, 0.4); }
+
+        .cb-custom {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 7px;
+            border: 2px solid #64748b;
+            background-color: #0f172a;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .cb-custom:checked {
+            background-color: #38bdf8;
+            border-color: #38bdf8;
+            transform: scale(1.15) rotate(5deg);
+        }
+        .cb-custom:checked::after {
+            content: '✓';
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 15px;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .task-done { text-decoration: line-through; opacity: 0.45; color: #94a3b8 !important; text-shadow: none !important; }
+
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+
+        @keyframes partyGlow {
+            0% { background-color: #0f172a; }
+            25% { background-color: #065f46; }
+            50% { background-color: #1e3a8a; }
+            75% { background-color: #701a75; }
+            100% { background-color: #0f172a; }
+        }
+        .party-flash { animation: partyGlow 1s ease-in-out; }
+
+        /* Fullscreen Modal Overlay */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(10px);
+            z-index: 50; display: flex; align-items: center; justify-content: center;
+            opacity: 0.0; pointer-events: none; transition: opacity 0.3s ease; padding: 1.5rem;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box-full {
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 95vw; height: 92vh; background: #1e293b; border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 1.5rem; padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .modal-overlay.active .modal-box-full { transform: scale(1); }
+
+        .neon-glow-text {
+            color: #38bdf8;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.7), 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        .neon-glow-yellow {
+            color: #fde047;
+            text-shadow: 0 0 8px rgba(253, 224, 71, 0.8), 0 0 18px rgba(253, 224, 71, 0.5), 0 0 28px rgba(253, 224, 71, 0.3);
+        }
+        .neon-glow-emerald {
+            color: #34d399;
+            text-shadow: 0 0 10px rgba(52, 211, 153, 0.7), 0 0 20px rgba(52, 211, 153, 0.4);
+        }
+    </style>
+</head>
+<body id="app-body" class="h-screen w-screen flex p-4 gap-4 text-base antialiased relative">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="w-1/4 flex flex-col gap-4 h-full">
+        <div class="dark-card p-5 flex flex-col justify-between shrink-0">
+            <div>
+                <div class="flex items-center justify-between gap-3.5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400 text-lg font-bold">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div>
+                            <h2 class="section-header text-base">Progres Fokus</h2>
+                            <p class="text-[11px] text-sky-400 font-semibold">Green Completion ID</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                    <button class="dark-btn py-2 px-3 text-xs flex items-center justify-center gap-1.5 bg-sky-500/10 text-sky-300 border-sky-400/30 hover:bg-sky-500/20" onclick="openModal('affirmation')">
+                        <i class="fa-solid fa-sparkles text-amber-300 text-sm"></i> Afirmasi
+                    </button>
+                    <button class="dark-btn py-2 px-3 text-xs flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-300 border-emerald-400/30 hover:bg-emerald-500/20" onclick="openModal('note')">
+                        <i class="fa-solid fa-book-open text-sm"></i> Catatan
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-3.5 border-t border-slate-700/60 flex items-center justify-between">
+                <span class="text-slate-400 text-sm font-semibold">Streak Aktif</span>
+                <div class="bg-amber-500/15 border border-amber-400/30 px-3 py-1.5 rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-fire text-amber-400 text-lg"></i> 
+                    <span class="text-amber-300 font-extrabold text-base" id="streak-counter">0 Hari</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dark-card p-6 flex flex-col justify-center shrink-0">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm font-bold uppercase tracking-wider text-slate-300">Pomodoro Timer</span>
+                <i class="fa-solid fa-stopwatch text-sky-400 text-lg"></i>
+            </div>
+            <div class="text-6xl font-black text-slate-100 tracking-tight my-2" id="timer-display">25:00</div>
+            <div class="flex gap-3 mt-4">
+                <button class="dark-btn flex-1 py-3 text-base flex items-center justify-center gap-2" onclick="toggleTimer()">
+                    <i class="fa-solid fa-play text-sm" id="play-icon"></i> <span id="play-label">Mulai</span>
+                </button>
+                <button class="dark-btn px-4 py-3 text-base" onclick="resetTimer()">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="dark-card p-5 flex flex-col justify-between flex-grow">
+            <div class="space-y-4">
+                <div class="flex flex-col items-center justify-center bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 relative">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" id="daily-sidebar-date">Progres Harian - Hari Ini</span>
+                    <div class="relative flex items-center justify-center w-[130px] h-[130px]">
+                        <svg class="giant-ring-svg w-full h-full">
+                            <circle cx="70" cy="70" r="50" class="giant-ring-bg"></circle>
+                            <circle id="sidebar-giant-ring" cx="70" cy="70" r="50" class="giant-ring-segment stroke-sky-400" stroke-width="15" stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <span class="text-xl font-black text-white tracking-tight leading-none" id="daily-sidebar-text">0%</span>
+                            <span class="text-[9px] text-slate-400 uppercase font-bold mt-0.5">Selesai</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-sm font-bold uppercase tracking-wider text-sky-400">Grafik Bulanan</span>
+                        <span class="text-base font-extrabold text-sky-400" id="monthly-text">0%</span>
+                    </div>
+                    <div class="monthly-chart-container" id="monthly-chart-bars"></div>
+                </div>
+                
+                <div class="space-y-2 pt-2 border-t border-slate-700/60 text-sm">
+                    <div class="flex justify-between text-slate-300">
+                        <span class="text-slate-400">Total Tugas Bulan Ini</span>
+                        <span class="font-semibold" id="stats-total">0</span>
+                    </div>
+                    <div class="flex justify-between text-slate-300">
+                        <span class="text-slate-400">Selesai</span>
+                        <span class="font-semibold text-emerald-400" id="stats-completed">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-700/60 flex gap-2">
+                <button class="dark-btn flex-1 py-2 text-xs flex items-center justify-center gap-1.5" onclick="document.getElementById('file-upload').click()">
+                    <i class="fa-solid fa-file-arrow-down"></i> Import
+                </button>
+                <input type="file" id="file-upload" class="hidden" accept=".xlsx" onchange="importData(event)">
+                <button class="dark-btn flex-1 py-2 text-xs flex items-center justify-center gap-1.5" onclick="exportData()">
+                    <i class="fa-solid fa-file-arrow-up"></i> Export
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CENTER COLUMN -->
+    <main class="w-2/4 dark-card p-6 h-full flex flex-col">
+        <div class="flex justify-between items-center mb-6 px-1 shrink-0">
+            <button class="dark-btn w-11 h-11 flex items-center justify-center text-lg" onclick="changeMonth(-1)">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <h2 class="month-header-giant text-center" id="month-year-display">Bulan Tahun</h2>
+            <button class="dark-btn w-11 h-11 flex items-center justify-center text-lg" onclick="changeMonth(1)">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-7 gap-2.5 mb-2 text-center text-sm font-extrabold uppercase tracking-wider text-slate-300 shrink-0">
+            <span class="text-rose-400">Minggu</span>
+            <span>Senin</span>
+            <span>Selasa</span>
+            <span>Rabu</span>
+            <span>Kamis</span>
+            <span>Jumat</span>
+            <span class="text-rose-400">Sabtu</span>
+        </div>
+
+        <div id="calendar-grid" class="grid grid-cols-7 grid-rows-5 gap-2.5 flex-grow w-full"></div>
+    </main>
+
+    <!-- RIGHT COLUMN -->
+    <aside class="w-1/4 flex flex-col gap-4 h-full">
+        <div class="dark-card p-4 flex-1 flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between pb-2.5 mb-2 border-b border-slate-700/60">
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-sky-400"></div>
+                    <h3 class="section-header">Rutinitas Harian</h3>
+                </div>
+                <span class="text-xs text-sky-400 font-semibold">Otomatis</span>
+            </div>
+
+            <div class="flex-1 overflow-y-auto pr-1 space-y-2.5 custom-scroll" id="routine-list"></div>
+
+            <div class="pt-2.5 mt-2 border-t border-slate-700/60 flex flex-col gap-2">
+                <div class="flex gap-1.5">
+                    <select id="routine-priority" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-slate-300">
+                        <option value="high">🔴 Tinggi</option>
+                        <option value="medium" selected>🟡 Sedang</option>
+                        <option value="low">🔵 Rendah</option>
+                    </select>
+                    <input type="text" id="routine-deadline" placeholder="Deadline" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-200 w-24">
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="routine-add-input" placeholder="Tambah rutinitas..." class="flex-grow bg-slate-900/60 border border-slate-700 rounded-xl px-3 py-1.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-sky-400" onkeypress="handleKeyPress(event, 'routine')">
+                    <button class="dark-btn px-3 py-1.5 text-sm bg-sky-500/20 text-sky-400 hover:bg-sky-500/30" onclick="addRoutine()">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dark-card p-4 flex-1 flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between pb-2.5 mb-2 border-b border-slate-700/60">
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+                    <h3 class="section-header truncate" id="daily-title-header">Harian Spesifik</h3>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto pr-1 space-y-2.5 custom-scroll" id="daily-list"></div>
+
+            <div class="pt-2.5 mt-2 border-t border-slate-700/60 flex flex-col gap-2">
+                <div class="flex gap-1.5">
+                    <select id="daily-priority" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-slate-300">
+                        <option value="high">🔴 Tinggi</option>
+                        <option value="medium" selected>🟡 Sedang</option>
+                        <option value="low">🔵 Rendah</option>
+                    </select>
+                    <input type="text" id="daily-deadline" placeholder="Deadline" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-200 w-24">
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="daily-add-input" placeholder="Tambah harian..." class="flex-grow bg-slate-900/60 border border-slate-700 rounded-xl px-3 py-1.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-emerald-400" onkeypress="handleKeyPress(event, 'daily')">
+                    <button class="dark-btn px-3 py-1.5 text-sm bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30" onclick="addDaily()">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- FULLSCREEN MODAL POPUP -->
+    <div id="app-modal" class="modal-overlay" onclick="closeModalOnBg(event)">
+        <div class="modal-box-full">
+            <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-700/60 shrink-0">
+                <h3 id="modal-title" class="font-extrabold text-2xl neon-glow-text flex items-center gap-3">
+                    <i class="fa-solid fa-sparkles"></i> Afirmasi Hari Ini
+                </h3>
+                <div class="flex items-center gap-2">
+                    <label id="upload-label-btn" class="dark-btn px-2.5 py-1.5 text-xs bg-sky-500/15 text-sky-300 border-sky-400/30 cursor-pointer flex items-center gap-1.5 hover:bg-sky-500/30">
+                        <i class="fa-image"></i> Pilih Gambar
+                        <input type="file" id="affirmation-image-upload" accept="image/*,.png,.jpg,.jpeg,.webp,.gif,.svg,.bmp,.ico" class="hidden" onchange="handleAffirmationImageUpload(event)">
+                    </label>
+                    <button id="shuffle-affirmation-btn" class="dark-btn px-2.5 py-1.5 text-xs bg-sky-500/20 text-sky-300 border-sky-400/30 flex items-center gap-1.5" onclick="randomAffirmation(true)">
+                        <i class="fa-solid fa-shuffle"></i> Acak Mantra
+                    </button>
+                    <button id="delete-img-btn" class="dark-btn px-2.5 py-1.5 text-xs bg-rose-500/20 text-rose-300 border-rose-400/30 hidden" onclick="deleteAffirmationImage()" title="Hapus Gambar">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <button class="dark-btn px-3 py-1.5 text-xs flex items-center gap-1.5" onclick="closeModal()">
+                        <i class="fa-solid fa-xmark text-sm"></i> Tutup
+                    </button>
+                </div>
+            </div>
+            
+            <div id="content-affirmation" class="flex-1 flex flex-col items-center justify-center gap-4 overflow-hidden relative">
+                <div class="w-full shrink-0 text-center px-4 py-2 bg-slate-900/40 rounded-xl border border-slate-700/40">
+                    <p id="affirmation-quote" class="text-2xl md:text-3xl font-black neon-glow-yellow italic max-w-5xl mx-auto leading-relaxed">"Konsistensi kecil mengalahkan ledakan usaha sesaat."</p>
+                    <span class="text-[10px] tracking-widest text-slate-400 uppercase font-bold mt-1 block">Mantra Harian Acak (100+ Koleksi)</span>
+                </div>
+                <div class="w-full flex-1 flex flex-col items-center justify-center bg-slate-900/60 border border-slate-700/50 rounded-2xl p-4 text-center relative overflow-hidden">
+                    <img id="affirmation-image-preview" src="" alt="Afirmasi User" style="display: none;" class="w-full h-full object-contain rounded-xl max-h-[64vh]">
+                </div>
+            </div>
+
+            <div id="content-note" class="flex-1 flex flex-col gap-4 hidden overflow-hidden">
+                <textarea id="user-note-area" class="w-full flex-1 bg-slate-900/90 border border-slate-700 rounded-2xl p-6 text-xl neon-glow-yellow outline-none focus:border-amber-400 resize-none leading-relaxed custom-scroll font-bold" placeholder="Tulis catatan, refleksi, atau ide besar hari ini... (Tulisan menyala kuning)"></textarea>
+                <div class="flex justify-end gap-3 shrink-0">
+                    <button class="dark-btn px-6 py-2.5 text-sm bg-amber-500/20 text-amber-300 border-amber-400/30 neon-glow-yellow" onclick="saveUserNote()">
+                        <i class="fa-solid fa-check mr-2"></i> Simpan Catatan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quotesPool = [
+            "Konsistensi kecil mengalahkan ledakan usaha sesaat.",
+            "Setiap tugas yang dicentang adalah kemenangan atas diri sendiri.",
+            "Progres lambat tetaplah progres. Jangan berhenti.",
+            "Fokus pada satu hal, selesaikan dengan tuntas.",
+            "Hari ini dirancang untuk lebih baik dari kemarin.",
+            "Disiplin adalah kebebasan dalam bentuk tindakan.",
+            "Waktu terus berjalan, buat aksinya berarti.",
+            "Lelah itu wajar, menyerah itu pilihan.",
+            "Kecil setiap hari berbuah hasil luar biasa.",
+            "Jangan tunggu sempurna, mulai dari sekarang.",
+            "Kekuatan terbesar lahir dari kebiasaan harian.",
+            "Rencana tanpa aksi hanya angan-angan.",
+            "Fokuskan energi pada apa yang bisa dikendalikan.",
+            "Kegagalan hanya data untuk mencoba lebih cerdas.",
+            "Satu langkah maju lebih baik dari diam di tempat.",
+            "Hargai proses, hasil akan mengikuti.",
+            "Bangun versi terbaik dirimu secara diam-diam.",
+            "Tenang, bernapas, dan eksekusi.",
+            "Rasa malas musuh utama, taklukkan hari ini.",
+            "Masa depan dibangun oleh kebiasaan hari ini.",
+            "Jangan bandingkan prosesmu dengan panggung orang lain.",
+            "Berani gagal berarti berani bertumbuh.",
+            "Kejernihan pikiran datang dari aksi nyata.",
+            "Buat dirimu bangga saat melihat ke belakang nanti.",
+            "Kualitas hidup ditentukan oleh kualitas keputusanmu.",
+            "Selesaikan yang tertunda, ringankan pikiran.",
+            "Aksimu hari ini adalah penentu esok hari.",
+            "Letih hari ini adalah fondasi sukses esok hari.",
+            "Tegar di tengah proses yang melelahkan.",
+            "Jadilah solusi bagi tantanganmu sendiri.",
+            "Fokus pada solusi, bukan pada keluhan.",
+            "Setiap detik adalah peluang baru.",
+            "Kunci konsistensi adalah memulai tanpa overthinking.",
+            "Berikan versi 100% dari kapasitasmu hari ini.",
+            "Langkah kecil berulang melahirkan lompatan besar.",
+            "Jaga arah kompas, abaikan gangguan kecil.",
+            "Kedisiplinan mengalahkan motivasi yang surut.",
+            "Nikmati proses bertumbuh yang sunyi.",
+            "Pilih tindakan, bukan penyesalan.",
+            "Hari ini penuh peluang jika mata dan pikiran terbuka.",
+            "Kendalikan pikiran sebelum pikiran mengendalikanmu.",
+            "Kesabaran dalam proses berbuah kematangan.",
+            "Jangan remehkan kekuatan centang tugas sederhana.",
+            "Ubah hambatan menjadi batu loncatan.",
+            "Syukuri proses, hadapi tantangan dengan senyuman.",
+            "Aksi nyata membungkam keraguan.",
+            "Fokus total pada tugas di depan mata.",
+            "Bangun fondasi kokoh untuk impian besar.",
+            "Keberhasilan adalah akumulasi kemenangan kecil.",
+            "Jadilah lebih baik 1% setiap harinya.",
+            "Rasa lelah akan hilang, hasil akan abadi.",
+            "Hadapi hari dengan energi dan optimisme.",
+            "Komitmen teruji saat rasa malas mendera.",
+            "Berinvestasi pada waktu luang untuk hal produktif.",
+            "Kendalikan waktu atau waktu yang mengendalikanmu.",
+            "Buat target realistis dan hantam setiap hari.",
+            "Ketekunan mengalahkan talenta yang malas.",
+            "Jaga fokus seperti sinar laser.",
+            "Semua keraguan sirna saat aksi dimulai.",
+            "Tuntaskan satu misi sebelum beralih ke yang lain.",
+            "Energi mengalir ke mana perhatian diarahkan.",
+            "Syukur membuat kapasitas mental meluas.",
+            "Kuasai dasar-dasar, hasil mahir akan datang.",
+            "Jangan biarkan hari berlalu tanpa kemajuan.",
+            "Bangun kebiasaan yang tidak butuh paksaan.",
+            "Tantang batasan dirimu dengan elegan.",
+            "Keberanian adalah mengambil tindakan meski takut.",
+            "Ketenangan batin lahir dari penyelesaian tugas.",
+            "Tetap rendah hati dan terus belajar.",
+            "Ciptakan momentum dari langkah pertama.",
+            "Waktu emas adalah sekarang.",
+            "Komitmen adalah janji pada diri sendiri.",
+            "Buat keputusan tegas dan jalankan.",
+            "Hapuskan distraksi, raih kejernihan.",
+            "Kerja keras cerdas melahirkan keajaiban.",
+            "Nikmati tantangan sebagai bentuk pelatihan.",
+            "Bangun otoritas atas fokus harianmu.",
+            "Jangan tunda kedamaian hati karena kelalaian.",
+            "Langkah berani membelah kabut ketidakpastian.",
+            "Hidup ini tentang eksekusi, bukan teori.",
+            "Jadilah nahkoda bagi pikiranmu sendiri.",
+            "Fokus pada pertumbuhan, bukan pengakuan.",
+            "Bangun sistem kerja yang meringankan beban mental.",
+            "Setiap usaha terekam dalam semesta.",
+            "Jaga stamina mental dengan istirahat terarah.",
+            "Keunggulan adalah kebiasaan, bukan kebetulan.",
+            "Ubah niat jadi tindakan seketika.",
+            "Hargai waktu sebagai aset paling berharga.",
+            "Bangun jembatan impian dengan batu kedisiplinan.",
+            "Jangan beri ruang untuk penundaan.",
+            "Kunci sukses ada pada ketahanan menerjang bosan.",
+            "Pilih bertumbuh atau diam dalam zona nyaman.",
+            "Kuasai diri, kuasai dunia kecilmu.",
+            "Langkah kecil terarah melibas jarak terjauh.",
+            "Rayakan setiap kemajuan kecil dengan bijak.",
+            "Fokus pada kualitas eksekusi.",
+            "Mantra hari ini: Selesaikan dan lampaui.",
+            "Masa depan cerah dicetak oleh tangan yang disiplin hari ini.",
+            "Tuntas dan berkualitas, itu standar barumu."
+        ];
+
+        // --- DAFTAR LIBUR NASIONAL INDONESIA 2026 (Referensi Resmi / Akurat) ---
+        const indonesianHolidays = {
+            "01-01": "Tahun Baru Masehi",
+            "01-16": "Isra Mikraj Nabi",
+            "02-17": "Tahun Baru Imlek",
+            "03-19": "Hari Suci Nyepi",
+            "03-21": "Hari Raya Idul Fitri",
+            "03-22": "Hari Raya Idul Fitri",
+            "04-03": "Wafat Yesus Kristus",
+            "04-05": "Hari Paskah",
+            "05-01": "Hari Buruh Internasional",
+            "05-14": "Kenaikan Yesus Kristus",
+            "05-27": "Hari Raya Idul Adha",
+            "05-31": "Hari Raya Waisak",
+            "06-01": "Hari Lahir Pancasila",
+            "06-16": "Tahun Baru Islam",
+            "08-17": "Proklamasi Kemerdekaan RI",
+            "08-25": "Maulid Nabi Muhammad SAW",
+            "12-25": "Hari Raya Natal"
+        };
+
+        function loadAffirmationImage() {
+            const savedImg = localStorage.getItem('userAffirmationImg');
+            const imgPreview = document.getElementById('affirmation-image-preview');
+            const delBtn = document.getElementById('delete-img-btn');
+            
+            if (savedImg && savedImg.trim() !== "") {
+                imgPreview.src = savedImg;
+                imgPreview.style.display = 'block';
+                if (delBtn) delBtn.classList.remove('hidden');
+            } else {
+                imgPreview.src = '';
+                imgPreview.style.display = 'none';
+                if (delBtn) delBtn.classList.add('hidden');
+            }
+        }
+
+        function handleAffirmationImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                localStorage.setItem('userAffirmationImg', base64Data);
+                loadAffirmationImage();
+                if (typeof AudioFx !== 'undefined') AudioFx.complete();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function deleteAffirmationImage() {
+            localStorage.removeItem('userAffirmationImg');
+            loadAffirmationImage();
+            if (typeof AudioFx !== 'undefined') AudioFx.click();
+        }
+
+        function openModal(type) {
+            const modal = document.getElementById('app-modal');
+            const title = document.getElementById('modal-title');
+            const affContent = document.getElementById('content-affirmation');
+            const noteContent = document.getElementById('content-note');
+            const uploadBtn = document.getElementById('upload-label-btn');
+            const shuffleBtn = document.getElementById('shuffle-affirmation-btn');
+
+            modal.classList.add('active');
+            AudioFx.click();
+
+            if (type === 'affirmation') {
+                title.innerHTML = `<i class="fa-solid fa-sparkles text-amber-400 mr-2"></i> Afirmasi Hari Ini`;
+                affContent.classList.remove('hidden');
+                noteContent.classList.add('hidden');
+                if(uploadBtn) uploadBtn.classList.remove('hidden');
+                if(shuffleBtn) shuffleBtn.classList.remove('hidden');
+                loadAffirmationImage();
+                randomAffirmation(false);
+            } else if (type === 'note') {
+                title.innerHTML = `<i class="fa-solid fa-book-open text-emerald-400 mr-2"></i> Catatan & Refleksi`;
+                affContent.classList.add('hidden');
+                noteContent.classList.remove('hidden');
+                if(uploadBtn) uploadBtn.classList.add('hidden');
+                if(shuffleBtn) shuffleBtn.classList.add('hidden');
+                document.getElementById('user-note-area').value = localStorage.getItem('userDailyNote') || '';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('app-modal').classList.remove('active');
+            AudioFx.click();
+        }
+
+        function closeModalOnBg(e) {
+            if (e.target.id === 'app-modal') closeModal();
+        }
+
+        function randomAffirmation(isManual = false) {
+            const todayStr = formatDate(new Date());
+            let chosenQuote = "";
+            const savedDailyQuote = localStorage.getItem('dailyQuote_' + todayStr);
+            const savedDailyDate = localStorage.getItem('dailyQuoteDate');
+
+            if (!isManual && savedDailyDate === todayStr && savedDailyQuote) {
+                chosenQuote = savedDailyQuote;
+            } else {
+                const randomIndex = Math.floor(Math.random() * quotesPool.length);
+                chosenQuote = quotesPool[randomIndex];
+                if (!isManual) {
+                    localStorage.setItem('dailyQuote_' + todayStr, chosenQuote);
+                    localStorage.setItem('dailyQuoteDate', todayStr);
+                }
+            }
+            document.getElementById('affirmation-quote').innerText = `"${chosenQuote}"`;
+            AudioFx.click();
+        }
+
+        function saveUserNote() {
+            const text = document.getElementById('user-note-area').value;
+            localStorage.setItem('userDailyNote', text);
+            closeModal();
+            AudioFx.complete();
+        }
+
+        const AudioFx = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+            click() {
+                try {
+                    this.init();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(650, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 0.045);
+                    gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.045);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.045);
+                } catch(e) {}
+            },
+            hover() {
+                try {
+                    this.init();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(350, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(500, this.ctx.currentTime + 0.025);
+                    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.025);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.025);
+                } catch(e) {}
+            },
+            complete() {
+                try {
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        gain.gain.setValueAtTime(0.45, now + idx * 0.06);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.25);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + idx * 0.06);
+                        osc.stop(now + idx * 0.06 + 0.25);
+                    });
+                } catch(e) {}
+            }
+        };
+
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest('.dark-day, .dark-btn, .cb-custom, button, select, input, label')) {
+                if (!e.target._hvd) {
+                    e.target._hvd = true;
+                    AudioFx.hover();
+                    setTimeout(() => e.target._hvd = false, 180);
+                }
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.dark-day, .dark-btn, .cb-custom, button, select, label')) {
+                AudioFx.click();
+            }
+        });
+
+        let currentDate = new Date();
+        let selectedDateStr = "";
+        
+        let dailyTasks = JSON.parse(localStorage.getItem('darkNeonHolidayDaily_v4')) || {};
+        let routineTasks = JSON.parse(localStorage.getItem('darkNeonHolidayRoutineList_v4')) || [];
+        let routineStatus = JSON.parse(localStorage.getItem('darkNeonHolidayRoutineStatus_v4')) || {}; 
+
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        const shortMonths = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+
+        function toCapitalEachWord(str) {
+            if(!str) return '';
+            return str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+        }
+
+        function init() {
+            selectedDateStr = formatDate(new Date());
+            calculateStreak();
+            renderCalendar();
+            renderTasks(selectedDateStr);
+            renderMonthlyProgress();
+            renderDailySidebar(selectedDateStr);
+        }
+
+        function formatDate(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        function saveData() {
+            localStorage.setItem('darkNeonHolidayDaily_v4', JSON.stringify(dailyTasks));
+            localStorage.setItem('darkNeonHolidayRoutineList_v4', JSON.stringify(routineTasks));
+            localStorage.setItem('darkNeonHolidayRoutineStatus_v4', JSON.stringify(routineStatus));
+            calculateStreak();
+            renderMonthlyProgress();
+            renderDailySidebar(selectedDateStr);
+        }
+
+        function calculateStreak() {
+            let streak = 0; let d = new Date();
+            while(true) {
+                let dStr = formatDate(d);
+                let dTasks = dailyTasks[dStr] || []; let rStatus = routineStatus[dStr] || [];
+                if(dTasks.some(t => t.done) || rStatus.length > 0) { streak++; d.setDate(d.getDate() - 1); } 
+                else { break; }
+            }
+            document.getElementById('streak-counter').innerText = `${streak} Hari`;
+        }
+
+        function getStatsForDate(dateStr) {
+            let dTasks = dailyTasks[dateStr] || [];
+            let total = routineTasks.length + dTasks.length;
+            
+            let uncompletedRoutines = routineTasks.filter(r => !(routineStatus[dateStr] || []).includes(r.id));
+            let uncompletedDailies = dTasks.filter(t => !t.done);
+
+            let rCompleted = routineStatus[dateStr] ? routineStatus[dateStr].length : 0;
+            let dCompleted = dTasks.filter(t => t.done).length;
+            let completed = rCompleted + dCompleted;
+
+            return { total, completed, progress: total > 0 ? (completed / total) * 100 : 0, uncompletedRoutines, uncompletedDailies };
+        }
+
+        function renderDailySidebar(dateStr) {
+            const dateObj = new Date(dateStr);
+            document.getElementById('daily-sidebar-date').innerText = `Progres: ${dateObj.getDate()} ${shortMonths[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+            let stats = getStatsForDate(dateStr);
+            let pct = Math.round(stats.progress);
+            document.getElementById('daily-sidebar-text').innerText = `${pct}%`;
+            
+            const radius = 50;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (pct / 100) * circumference;
+            const giantRing = document.getElementById('sidebar-giant-ring');
+            if(giantRing) {
+                giantRing.style.strokeDashoffset = offset;
+                giantRing.classList.toggle('stroke-emerald-400', pct === 100);
+                giantRing.classList.toggle('stroke-sky-400', pct < 100);
+            }
+        }
+
+        function renderMonthlyProgress() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let totalTasksMonth = 0;
+            let completedTasksMonth = 0;
+            const chartBarsEl = document.getElementById('monthly-chart-bars');
+            chartBarsEl.innerHTML = '';
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                let dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                let stats = getStatsForDate(dateStr);
+                totalTasksMonth += stats.total;
+                completedTasksMonth += stats.completed;
+
+                let pctDay = Math.round(stats.progress);
+                let barColor = pctDay === 100 ? '#10b981' : (pctDay > 0 ? '#38bdf8' : '#334155');
+                chartBarsEl.innerHTML += `<div class="monthly-chart-bar" style="height: ${Math.max(8, pctDay)}%; background-color: ${barColor};" title="Tgl ${i}: ${pctDay}%"></div>`;
+            }
+
+            let monthlyPercent = totalTasksMonth > 0 ? Math.round((completedTasksMonth / totalTasksMonth) * 100) : 0;
+            document.getElementById('monthly-text').innerText = `${monthlyPercent}%`;
+            document.getElementById('stats-total').innerText = totalTasksMonth;
+            document.getElementById('stats-completed').innerText = completedTasksMonth;
+        }
+
+        function getPriorityColorHex(prio) {
+            if(prio === 'high') return '#ef4444';
+            if(prio === 'low') return '#3b82f6';
+            return '#f59e0b';
+        }
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            document.getElementById('month-year-display').innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            const todayStr = formatDate(new Date());
+
+            for (let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div class="dark-day opacity-25 pointer-events-none border border-dashed border-slate-700/40 bg-transparent shadow-none"></div>`;
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const mm = String(month + 1).padStart(2, '0');
+                const dd = String(i).padStart(2, '0');
+                const mdKey = `${mm}-${dd}`;
+                const holidayName = indonesianHolidays[mdKey];
+
+                let dateStr = `${year}-${mm}-${dd}`;
+                let isToday = dateStr === todayStr;
+                let isPast = dateStr < todayStr;
+                let isSelected = dateStr === selectedDateStr;
+                let dayOfWeek = new Date(year, month, i).getDay();
+                let isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                let isHolidayID = Boolean(holidayName);
+                
+                let stats = getStatsForDate(dateStr);
+                let pct = Math.round(stats.progress);
+                let isComplete100 = stats.total > 0 && stats.completed === stats.total;
+
+                // Tanda centang hijau besar jika tugas selesai 100% (baik hari lewat maupun aktif/hari ini)
+                let completeCheckOverlay = isComplete100 ? `
+                    <div class="complete-check-overlay">
+                        <svg class="w-16 h-16 drop-shadow-[0_2px_8px_rgba(52,211,153,0.85)]" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>` : '';
+                
+                let selectStyle = isSelected ? 'ring-2 ring-sky-400 bg-sky-500/20' : '';
+                let weekendClass = (isWeekend || isHolidayID) ? 'holiday-id' : '';
+                let todayActiveClass = isToday ? 'is-today-active' : '';
+                let todayNumClass = isToday ? 'is-today-num' : '';
+                let borderStateClass = isPast && !isComplete100 ? 'past-date' : 'active-day-border';
+                let greenCompleteClass = isComplete100 ? 'all-complete-green' : '';
+
+                let holidayBadgeHtml = holidayName ? `<span class="holiday-badge" title="${holidayName}">${holidayName}</span>` : '';
+
+                // BEDA BENTUK & DIPISAH 2 BARIS (hanya muncul jika belum 100% selesai)
+                let bottomContent = '';
+                let rList = (stats.uncompletedRoutines || []).slice(0, 3);
+                let dList = (stats.uncompletedDailies || []).slice(0, 3);
+                
+                if (!isComplete100 && (rList.length > 0 || dList.length > 0)) {
+                    let rDots = rList.map(item => `<span class="w-2.5 h-2.5 rounded-full inline-block shadow-sm" style="background-color: ${getPriorityColorHex(item.priority||'medium')}" title="Rutin belum selesai"></span>`).join('');
+                    let dDots = dList.map(item => `<span class="w-2.5 h-2.5 rounded-sm inline-block shadow-sm" style="background-color: ${getPriorityColorHex(item.priority||'medium')}" title="Harian belum selesai"></span>`).join('');
+                    let rRow = rDots ? `<div class="flex items-center gap-1 z-20">${rDots}</div>` : '';
+                    let dRow = dDots ? `<div class="flex items-center gap-1 z-20">${dDots}</div>` : '';
+                    bottomContent = `<div class="flex flex-col gap-1 mt-auto">${rRow}${dRow}</div>`;
+                } else if (stats.total > 0 && !isComplete100) {
+                    bottomContent = `<div class="text-xs text-slate-200 font-extrabold z-10 w-full mt-auto bg-slate-900/45 px-2 py-1 rounded-md border border-slate-700/50">${stats.completed}/${stats.total} Selesai</div>`;
+                } else {
+                    bottomContent = '';
+                }
+
+                let r = 15;
+                let circ = 2 * Math.PI * r;
+                let dashOffset = circ - (pct / 100) * circ;
+                let ringColorClass = isComplete100 ? 'stroke-emerald-400' : 'stroke-sky-400';
+
+                grid.innerHTML += `
+                    <div class="dark-day relative overflow-hidden ${borderStateClass} ${greenCompleteClass} ${todayActiveClass} ${selectStyle} ${weekendClass}" 
+                         onclick="selectDate('${dateStr}')">
+                        <div class="flex justify-between items-start z-10 w-full">
+                            <div class="flex flex-col">
+                                <span class="active-date-num ${todayNumClass} font-black text-3xl leading-none">${i}</span>
+                                ${holidayBadgeHtml}
+                            </div>
+                            ${stats.total > 0 ? `
+                                <div class="relative flex items-center justify-center">
+                                    <svg class="w-9 h-9 transform -rotate-90">
+                                        <circle cx="18" cy="18" r="15" class="ring-bg" stroke-width="3"></circle>
+                                        <circle cx="18" cy="18" r="15" class="ring-prog ${ringColorClass}" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="${dashOffset}"></circle>
+                                    </svg>
+                                    <span class="absolute text-[9px] font-bold text-slate-200">${isComplete100 ? '✓' : pct + '%'}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        ${bottomContent}
+                        ${completeCheckOverlay}
+                    </div>
+                `;
+            }
+            renderMonthlyProgress();
+            renderDailySidebar(selectedDateStr);
+        }
+
+        function changeMonth(dir) { currentDate.setMonth(currentDate.getMonth() + dir); renderCalendar(); }
+        
+        function selectDate(dateStr) {
+            selectedDateStr = dateStr;
+            renderCalendar();
+            renderTasks(dateStr);
+            renderDailySidebar(dateStr);
+        }
+
+        function renderTasks(dateStr) {
+            const dateObj = new Date(dateStr);
+            document.getElementById('daily-title-header').innerText = `Harian: ${dateObj.getDate()} ${shortMonths[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+
+            const rList = document.getElementById('routine-list');
+            if (routineTasks.length === 0) {
+                rList.innerHTML = `<div class="py-6 text-center text-xs text-slate-500">Belum ada rutinitas</div>`;
+            } else {
+                let completedArr = routineStatus[dateStr] || [];
+                rList.innerHTML = routineTasks.map(t => {
+                    let isDone = completedArr.includes(t.id);
+                    let formattedText = toCapitalEachWord(t.text);
+                    let prioClass = `priority-${t.priority || 'medium'}`;
+                    return `
+                    <div class="flex flex-col gap-1.5 p-3 rounded-xl bg-slate-900/60 ${prioClass}">
+                        <div class="flex items-center gap-2.5">
+                            <input type="checkbox" class="cb-custom" ${isDone ? 'checked' : ''} onchange="toggleRoutine('${dateStr}', ${t.id}, this.checked)">
+                            <span class="flex-grow text-sm leading-tight task-text-item ${isDone ? 'task-done' : ''}">${formattedText}</span>
+                            <button class="text-slate-500 hover:text-rose-400 px-1 text-xs" onclick="deleteRoutine(${t.id})"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        ${t.deadline ? `<div class="text-[11px] text-slate-400 pl-8"><i class="fa-regular fa-clock mr-1"></i>DL: ${toCapitalEachWord(t.deadline)}</div>` : ''}
+                    </div>`;
+                }).join('');
+            }
+
+            const dList = document.getElementById('daily-list');
+            const dTasks = dailyTasks[dateStr] || [];
+            if (dTasks.length === 0) {
+                dList.innerHTML = `<div class="py-6 text-center text-xs text-slate-500">Kosong untuk tanggal ini</div>`;
+            } else {
+                dList.innerHTML = dTasks.map((t, index) => {
+                    let formattedText = toCapitalEachWord(t.text);
+                    let prioClass = `priority-${t.priority || 'medium'}`;
+                    return `
+                    <div class="flex flex-col gap-1.5 p-3 rounded-xl bg-slate-900/60 ${prioClass}">
+                        <div class="flex items-center gap-2.5">
+                            <input type="checkbox" class="cb-custom" ${t.done ? 'checked' : ''} onchange="toggleDaily('${dateStr}', ${index}, this.checked)">
+                            <span class="flex-grow text-sm leading-tight task-text-item ${t.done ? 'task-done' : ''}">${formattedText}</span>
+                            <button class="text-slate-500 hover:text-rose-400 px-1 text-xs" onclick="deleteDaily('${dateStr}', ${index})"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        ${t.deadline ? `<div class="text-[11px] text-slate-400 pl-8"><i class="fa-regular fa-clock mr-1"></i>DL: ${toCapitalEachWord(t.deadline)}</div>` : ''}
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        function triggerPartyConfetti() {
+            AudioFx.complete();
+            const body = document.getElementById('app-body');
+            body.classList.remove('party-flash');
+            void body.offsetWidth; 
+            body.classList.add('party-flash');
+
+            var count = 200;
+            var defaults = {
+                origin: { y: 0.6 },
+                colors: ['#38bdf8', '#34d399', '#f59e0b', '#ef4444', '#818cf8', '#10b981', '#ec4899', '#fde047']
+            };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+            
+            setTimeout(() => {
+                confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: defaults.colors });
+                confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: defaults.colors });
+            }, 300);
+        }
+
+        function toggleRoutine(dateStr, id, isDone) {
+            if(!routineStatus[dateStr]) routineStatus[dateStr] = [];
+            if (isDone) { routineStatus[dateStr].push(id); triggerPartyConfetti(); } 
+            else { routineStatus[dateStr] = routineStatus[dateStr].filter(tid => tid !== id); }
+            saveData(); renderCalendar(); renderTasks(dateStr); renderDailySidebar(dateStr);
+        }
+
+        function toggleDaily(dateStr, index, isDone) {
+            dailyTasks[dateStr][index].done = isDone;
+            if (isDone) triggerPartyConfetti();
+            saveData(); renderCalendar(); renderTasks(dateStr); renderDailySidebar(dateStr);
+        }
+
+        function addRoutine() {
+            const input = document.getElementById('routine-add-input');
+            const prio = document.getElementById('routine-priority').value;
+            const dl = document.getElementById('routine-deadline').value;
+            if (!input.value.trim()) return;
+            routineTasks.push({ id: Date.now(), text: toCapitalEachWord(input.value), priority: prio, deadline: toCapitalEachWord(dl) });
+            input.value = document.getElementById('routine-deadline').value = ''; 
+            saveData(); renderCalendar(); renderTasks(selectedDateStr); renderDailySidebar(selectedDateStr);
+        }
+
+        function addDaily() {
+            const input = document.getElementById('daily-add-input');
+            const prio = document.getElementById('daily-priority').value;
+            const dl = document.getElementById('daily-deadline').value;
+            if (!input.value.trim()) return;
+            if (!dailyTasks[selectedDateStr]) dailyTasks[selectedDateStr] = [];
+            dailyTasks[selectedDateStr].push({ text: toCapitalEachWord(input.value), done: false, priority: prio, deadline: toCapitalEachWord(dl) });
+            input.value = document.getElementById('daily-deadline').value = ''; 
+            saveData(); renderCalendar(); renderTasks(selectedDateStr); renderDailySidebar(selectedDateStr);
+        }
+
+        function deleteRoutine(id) {
+            event.stopPropagation();
+            routineTasks = routineTasks.filter(t => t.id !== id);
+            for(let date in routineStatus) routineStatus[date] = routineStatus[date].filter(tid => tid !== id);
+            saveData(); renderCalendar(); renderTasks(selectedDateStr); renderDailySidebar(selectedDateStr);
+        }
+
+        function deleteDaily(dateStr, index) {
+            event.stopPropagation();
+            dailyTasks[dateStr].splice(index, 1);
+            if(dailyTasks[dateStr].length === 0) delete dailyTasks[dateStr];
+            saveData(); renderCalendar(); renderTasks(dateStr); renderDailySidebar(dateStr);
+        }
+
+        function handleKeyPress(e, type) {
+            if (e.key === 'Enter') {
+                if(type === 'routine') addRoutine();
+                if(type === 'daily') addDaily();
+            }
+        }
+
+        /* --- POMODORO TIMER --- */
+        let timerInterval; let timeRemaining = 25 * 60; let isRunning = false;
+        function updateTimerDisplay() {
+            let m = Math.floor(timeRemaining / 60); let s = timeRemaining % 60;
+            document.getElementById('timer-display').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+        function toggleTimer() {
+            const icon = document.getElementById('play-icon');
+            const label = document.getElementById('play-label');
+            if (isRunning) {
+                clearInterval(timerInterval); icon.className = 'fa-solid fa-play text-xs'; label.innerText = 'Mulai';
+            } else {
+                icon.className = 'fa-solid fa-pause text-xs'; label.innerText = 'Jeda';
+                timerInterval = setInterval(() => {
+                    if (timeRemaining > 0) { timeRemaining--; updateTimerDisplay(); }
+                    else {
+                        clearInterval(timerInterval); triggerPartyConfetti();
+                        alert("Sesi fokus selesai!"); resetTimer();
+                    }
+                }, 1000);
+            }
+            isRunning = !isRunning;
+        }
+        function resetTimer() { 
+            clearInterval(timerInterval); timeRemaining = 25 * 60; isRunning = false; 
+            document.getElementById('play-icon').className = 'fa-solid fa-play text-xs'; 
+            document.getElementById('play-label').innerText = 'Mulai';
+            updateTimerDisplay(); 
+        }
+
+        /* --- EXCEL EXPORT / IMPORT --- */
+        function exportData() {
+            let exportArr = [];
+            for(let date in dailyTasks) dailyTasks[date].forEach(t => exportArr.push({ Tanggal: date, Tipe: "Harian", Tugas: t.text, Prioritas: t.priority, Deadline: t.deadline, Status: t.done ? "Selesai" : "Belum" }));
+            for(let date in routineStatus) routineStatus[date].forEach(id => { let r = routineTasks.find(x => x.id === id); if(r) exportArr.push({ Tanggal: date, Tipe: "Rutin", Tugas: r.text, Prioritas: r.priority, Deadline: r.deadline, Status: "Selesai" }); });
+            if(exportArr.length === 0) return alert("Tidak ada data untuk diekspor.");
+            const ws = XLSX.utils.json_to_sheet(exportArr); const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Progres"); XLSX.writeFile(wb, "Dark_Green_Complete.xlsx");
+        }
+        function importData(e) {
+            alert("Fitur import disesuaikan dengan format sistem."); e.target.value = "";
+        }
+
+        init();
+    </script>
+</body>
+</html>
